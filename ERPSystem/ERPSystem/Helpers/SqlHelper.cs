@@ -23,7 +23,7 @@ namespace ERPSystem.Helpers
 
                 customer.CustomerNo = (string)row["CustomerNo"];
                 customer.CustomerName = (string)row["CustomerName"];
-                customer.Streetaddress = (string)row["Streetadress"];
+                customer.Streetaddress = (string)row["Streetaddress"];
                 customer.City = (string)row["City"];
                 customer.Country = (string)row["Country"];
                 customer.VIP = (bool)row["VIP"];
@@ -44,7 +44,7 @@ namespace ERPSystem.Helpers
 
                 customer.CustomerNo = (string)row["CustomerNo"];
                 customer.CustomerName = (string)row["CustomerName"];
-                customer.Streetaddress = (string)row["Streetadress"];
+                customer.Streetaddress = (string)row["Streetaddress"];
                 customer.City = (string)row["City"];
                 customer.Country = (string)row["Country"];
                 customer.VIP = (bool)row["VIP"];
