@@ -1569,26 +1569,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\jbaurle\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Users\\prokhorova\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\SOURCE\\Gengenbach\\2021\\AMZERPSystem\\ERPSystem\\ERPSystem\\ERPSystem.csproj",
+      "projectUniqueName": "C:\\Source\\ERPSystem\\ERPSystem\\ERPSystem\\ERPSystem.csproj",
       "projectName": "ERPSystem",
-      "projectPath": "C:\\SOURCE\\Gengenbach\\2021\\AMZERPSystem\\ERPSystem\\ERPSystem\\ERPSystem.csproj",
-      "packagesPath": "C:\\Users\\jbaurle\\.nuget\\packages\\",
-      "outputPath": "C:\\SOURCE\\Gengenbach\\2021\\AMZERPSystem\\ERPSystem\\ERPSystem\\obj\\",
+      "projectPath": "C:\\Source\\ERPSystem\\ERPSystem\\ERPSystem\\ERPSystem.csproj",
+      "packagesPath": "C:\\Users\\prokhorova\\.nuget\\packages\\",
+      "outputPath": "C:\\Source\\ERPSystem\\ERPSystem\\ERPSystem\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\jbaurle\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\prokhorova\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1596,13 +1593,10 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "http://nuget.syncfusion.com/nuget_universalwindows/nuget/getsyncfusionpackages/universalwindows": {},
-        "https://api.nuget.org/v3/index.json": {},
-        "https://nuget.syncfusion.com/nuget_wpf/nuget/getsyncfusionpackages/wpf": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -1614,7 +1608,6 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
-        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Microsoft.Data.SqlClient": {
             "target": "Package",
@@ -1639,7 +1632,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.411\\RuntimeIdentifierGraph.json"
       }
     }
   }

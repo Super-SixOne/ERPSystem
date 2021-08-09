@@ -27,6 +27,17 @@ namespace ERPSystem.Controllers
             return View();
         }
 
+        public IActionResult AddOrder()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddOrder(OrderHeader order)
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
