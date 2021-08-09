@@ -12,6 +12,8 @@ namespace ERPSystem.Helpers
     {
         public const string ConnectionString = "Data Source=demo.peakboard.rocks;Initial Catalog=AMZDB;User ID=AMZAdmin;Password=Gengenbach2021";
 
+        #region CRUD Customer
+
         public static async Task<int> AddCustomerAsync(Customer customer, CancellationToken cancellationToken)
         {
             if (customer != null)
@@ -102,6 +104,10 @@ namespace ERPSystem.Helpers
             return null;
         }
 
+        #endregion
+
+        #region CRUD Order / Items
+
         public static Task<OrderHeaderCollection> GetOrdersAsync(CancellationToken cancellationToken)
         {
             return GetOrdersAsync(null, cancellationToken);
@@ -145,16 +151,20 @@ namespace ERPSystem.Helpers
                 item.OrderNo = (string)row["OrderNo"];
                 item.OrderPos = (string)row["OrderPos"];
                 item.Material = (string)row["Material"];
-                item.Description = (string)row["Description"];
                 item.Status = (string)row["Status"];
                 item.TargetQuantity = (int)row["TargetQuantity"];
                 item.CurrentQuantity = (int)row["CurrentQuantity"];
+                item.NOKQuantity = (int)row["NOKQuantity"];
 
                 items.Add(item);
             }
 
             return items;
         }
+
+        #endregion
+
+        #region Helper Methods
 
         public static async Task<DataTable> GetDataAsync(string statement, CancellationToken cancellationToken)
         {
@@ -182,5 +192,7 @@ namespace ERPSystem.Helpers
                 }
             }
         }
+
+        #endregion
     }
 }
