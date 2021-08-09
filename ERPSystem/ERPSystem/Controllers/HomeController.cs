@@ -30,8 +30,8 @@ namespace ERPSystem.Controllers
         }
         public async Task<IActionResult> Customers()
         {
-            
-            return View();
+            var customers = await SqlHelper.GetCustomersAsync(CancellationToken.None);
+            return View(customers);
         }
 
         public IActionResult AddCustomer()
@@ -40,8 +40,9 @@ namespace ERPSystem.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddCustomer(Customer customer)
+        public async Task<IActionResult> AddCustomer(Customer customer)
         {
+            await SqlHelper.AddCustomerAsync(customer, CancellationToken.None);
             return View();
         }
 
