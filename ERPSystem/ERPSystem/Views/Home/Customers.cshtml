@@ -7,9 +7,9 @@
     <h1>Customers (@Model.Count)</h1>
     
     <span data-toggle="tooltip" title="Add new customer">
-        <a class="btn btn-outline-dark" data-toggle="modal" data-target="#modal-mrole">
+        <button class="btn btn-outline-dark" data-toggle="modal" data-target="#modal-mrole">
             <i class="fas fa-user-plus"></i>
-        </a>
+        </button>
     </span>
 </div>
 
@@ -40,9 +40,13 @@
                             <button type="button" class="btn btn-outline-success" data-toggle="tooltip" title="Edit current customer">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button type="button" class="btn btn-outline-danger" data-toggle="tooltip" title="Delete current customer">
-                                <i class="fas fa-user-slash"></i>
-                            </button>
+                             <span data-toggle="tooltip" title="Delete current customer">
+                                 <button class="btn btn-outline-danger deleteItem" data-toggle="modal" data-target="#modal-delete" 
+                                         data-id="@customer.CustomerNo"
+                                         data-path="@Url.Action("DeleteCustomer", "Home", new {customerNo = customer.CustomerNo})">
+                                        <i class="fas fa-user-slash"></i>
+                                    </button>
+                                </span>
                         </div>
                     </td>
                 </tr>
@@ -60,47 +64,85 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="box box-primary">
-                    <div class="modal-body">
-                        @using (Html.BeginForm("AddCustomer", "Home", FormMethod.Post))
-                        {
-                            <div class="form-group row">
-                                <label for="CustomerName" class="col-sm-2 col-form-label">Customer Name</label>
-                                <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="CustomerName" name="CustomerName">
-                                </div>
-                              </div>
-                            
-                            <div class="form-group row">
-                                <label for="CustomerName" class="col-sm-2 col-form-label">Country</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="Country" name="Country" maxlength="3">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group row">
-                                <label for="CustomerName" class="col-sm-2 col-form-label">City</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="City" name="City">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group row">
-                                <label for="CustomerName" class="col-sm-2 col-form-label">Address</label>
-                                <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="Streetaddress" name="Streetaddress">
-                                </div>
-                            </div>
-                            <div class="row float-right">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
-                            </div>
-                        }
+                @using (Html.BeginForm("AddCustomer", "Home", FormMethod.Post))
+                {
+                    <div class="form-group row">
+                        <label for="CustomerName" class="col-sm-3 col-form-label">Customer Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="CustomerName" name="CustomerName" required>
+                        </div>
                     </div>
-                </div>
+                    
+                    <div class="form-group row">
+                        <label for="Country" class="col-sm-3 col-form-label">Country</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="Country" name="Country" maxlength="3" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="City" class="col-sm-3 col-form-label">City</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="City" name="City" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="Streetaddress" class="col-sm-3 col-form-label">Address</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="Streetaddress" name="Streetaddress" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="VIP" name="VIP">
+                            <label class="form-check-label" for="VIP">
+                                Add VIP status for customer
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="row float-right">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                    </div>
+                }
             </div>
         </div>
     </div>
 </div>
 
+<div class="modal fade" id="modal-delete" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Customer Delete Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Are you sure you want to delete current customer?</h4>
+                <p class="alert alert-warning">You will not be able to revert changes.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" id="btnContinueDelete">Delete</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+@section Scripts
+{
+    <script>
+        var path_to_delete;
+    
+        $(".deleteItem").click(function(e) {
+            path_to_delete = $(this).data('path');
+        });
+    
+        $('#btnContinueDelete').click(function () {
+            window.location = path_to_delete;
+        });
+    </script>
+}

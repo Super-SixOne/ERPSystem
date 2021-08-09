@@ -63,6 +63,13 @@ namespace ERPSystem.Controllers
 
             return RedirectToAction("Customers");
         }
+        
+        public async Task<IActionResult> DeleteCustomer(string customerNo)
+        {
+            await SqlHelper.DeleteCustomerAsync(customerNo, CancellationToken.None);
+
+            return RedirectToAction("Customers");
+        }
 
         public IActionResult AddOrder()
         {
