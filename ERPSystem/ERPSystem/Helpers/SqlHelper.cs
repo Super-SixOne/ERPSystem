@@ -11,11 +11,57 @@ namespace ERPSystem.Helpers
     {
         public const string ConnectionString = "Data Source=demo.peakboard.rocks;Initial Catalog=AMZDB;User ID=AMZAdmin;Password=Gengenbach2021";
 
-        public static async Task<OrderHeaderCollection> GetOrdersAsync(CancellationToken cancellationToken)
+        public static async Task<CustomerCollection> GetCustomersAsync(CancellationToken cancellationToken)
+        {
+            var customers = new CustomerCollection();
+
+            var table = await GetDataAsync("SELECT * FROM Customers", cancellationToken);
+
+            foreach (DataRow row in table.Rows)
+            {
+                var customer = new Customer();
+
+                customer.CustomerNo = (string)row["CustomerNo"];
+                customer.CustomerName = (string)row["CustomerName"];
+                customer.StreetAddress = (string)row["Streetadress"];
+                customer.City = (string)row["City"];
+                customer.Country = (string)row["Country"];
+                customer.Vip = (bool)row["VIP"];
+                customer.Orders = await GetOrdersAsync(customer.CustomerNo, cancellationToken);
+
+                customers.Add(customer);
+            }
+
+            return customers;
+        }
+
+        public static async Task<Customer> GetCustomerAsync(string customerNo, CancellationToken cancellationToken)
+        {
+            var table = await GetDataAsync($"SELECT * FROM Customers WHERE CustomerNo='{customerNo}'", cancellationToken);
+
+            foreach (DataRow row in table.Rows)
+            {
+                var customer = new Customer();
+
+                customer.CustomerNo = (string)row["CustomerNo"];
+                customer.CustomerName = (string)row["CustomerName"];
+                customer.StreetAddress = (string)row["Streetadress"];
+                customer.City = (string)row["City"];
+                customer.Country = (string)row["Country"];
+                customer.Vip = (bool)row["VIP"];
+                customer.Orders = await GetOrdersAsync(customer.CustomerNo, cancellationToken);
+                
+                return customer;
+            }
+
+            return null;
+        }
+
+        public static async Task<OrderHeaderCollection> GetOrdersAsync(string customerNo, CancellationToken cancellationToken)
         {
             var orders = new OrderHeaderCollection();
 
-            var table = await GetDataAsync("SELECT * FROM OrderHeader", cancellationToken);
+            var table = await GetDataAsync($"SELECT * FROM OrderHeader WHERE CustomerNo='{customerNo}'", cancellationToken);
 
             foreach (DataRow row in table.Rows)
             {
@@ -27,7 +73,7 @@ namespace ERPSystem.Helpers
                 order.Status = (string)row["Status"];
                 order.Carrier = (string)row["Carrier"];
                 order.Sequence = (int)row["Sequence"];
-                order.Items = await GetOrderItemsAsync(order.OrderNo, CancellationToken.None);
+                order.Items = await GetOrderItemsAsync(order.OrderNo, cancellationToken);
 
                 orders.Add(order);
             }
@@ -74,14 +120,14 @@ namespace ERPSystem.Helpers
         }
 
 
-        public static Task<int> ExecuteNonQueryAsync(string statement)
+        public static Task<int> ExecuteNonQueryAsync(string statement, CancellationToken cancellationToken)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 using (var command = new SqlCommand(statement, connection))
                 {
                     connection.Open();
-                    return command.ExecuteNonQueryAsync();
+                    return command.ExecuteNonQueryAsync(cancellationToken);
                 }
             }
         }
