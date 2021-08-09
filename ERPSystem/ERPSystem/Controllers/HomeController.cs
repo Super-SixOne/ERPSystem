@@ -34,6 +34,17 @@ namespace ERPSystem.Controllers
             return View();
         }
 
+        public IActionResult AddCustomer()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddCustomer(Customer customer)
+        {
+            return View();
+        }
+
         public IActionResult AddOrder()
         {
             return View();
