@@ -24,7 +24,7 @@ namespace ERPSystem.Controllers
             return View();
         }
 
-        public IActionResult Orders()
+        public async Task<IActionResult> Orders()
         {
             var orders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
 
