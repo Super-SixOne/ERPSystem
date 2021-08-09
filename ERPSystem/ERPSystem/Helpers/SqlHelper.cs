@@ -12,7 +12,7 @@ namespace ERPSystem.Helpers
     {
         public const string ConnectionString = "Data Source=demo.peakboard.rocks;Initial Catalog=AMZDB;User ID=AMZAdmin;Password=Gengenbach2021";
 
-        public static async Task AddCustomerAsync(Customer customer, CancellationToken cancellationToken)
+        public static async Task<int> AddCustomerAsync(Customer customer, CancellationToken cancellationToken)
         {
             if (customer != null)
             {
@@ -27,8 +27,35 @@ namespace ERPSystem.Helpers
                 sql.Append($"{(customer.VIP ? "1" : "0")}");
                 sql.Append(")");
 
-                await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
+                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
             }
+
+            return 0;
+        }
+
+        public static async Task<int> UpdateCustomerAsync(Customer customer, CancellationToken cancellationToken)
+        {
+            if (customer != null)
+            {
+                var sql = new StringBuilder();
+
+                sql.Append($"UPDATE Customer ");
+                sql.Append($"SET CustomerName='{customer.CustomerName}',");
+                sql.Append($"Streetaddress='{customer.Streetaddress}',");
+                sql.Append($"City='{customer.City}',");
+                sql.Append($"Country='{customer.Country}',");
+                sql.Append($"VIP={(customer.VIP ? "1" : "0")} ");
+                sql.Append($"WHERE CustomerNo = '{customer.CustomerNo}'");
+
+                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
+            }
+
+            return 0;
+        }
+
+        public static async Task<int> DeleteCustomerAsync(string customerNo, CancellationToken cancellationToken)
+        {
+            return await ExecuteNonQueryAsync($"DELETE FROM Customer WHERE CustomerNo = '{customerNo}'", cancellationToken);
         }
 
         public static async Task<CustomerCollection> GetCustomersAsync(CancellationToken cancellationToken)
