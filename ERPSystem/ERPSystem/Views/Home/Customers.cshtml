@@ -1,5 +1,50 @@
-﻿@{
+﻿@model ERPSystem.Models.CustomerCollection;
+@{
     ViewData["Title"] = "Customers";
 }
-<h1>@ViewData["Title"]</h1>
+
+<div class="d-flex justify-content-between mb-3">
+    <h1>Orders (@Model.Count)</h1>
+    <button type="button" class="btn btn-outline-dark">
+        Add new customer
+    </button>
+</div>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">VIP</th>
+        <th scope="col">Customer No</th>
+        <th scope="col">Customer Name</th>
+        <th scope="col">Country</th>
+        <th scope="col">City</th>
+        <th scope="col">Address</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+         @foreach (var customer in Model)
+            {
+                <tr>
+                    <td>@customer.VIP</td>
+                    <td>@customer.CustomerNo</td>
+                    <td>@customer.CustomerName</td>
+                    <td>@customer.Country</td>
+                    <td>@customer.City</td>
+                    <td>@customer.Streetaddress</td>
+                    <td>
+                        <div class="float-right">
+                             <button type="button" class="btn btn-outline-success">
+                                Edit
+                            </button>
+                            <button type="button" class="btn btn-outline-danger">
+                                Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+    </tbody>
+</table>
+
 
