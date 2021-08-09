@@ -55,11 +55,17 @@ namespace ERPSystem.Helpers
             return null;
         }
 
+        public static Task<OrderHeaderCollection> GetOrdersAsync(CancellationToken cancellationToken)
+        {
+            return GetOrdersAsync(null, cancellationToken);
+        }
+
         public static async Task<OrderHeaderCollection> GetOrdersAsync(string customerNo, CancellationToken cancellationToken)
         {
             var orders = new OrderHeaderCollection();
 
-            var table = await GetDataAsync($"SELECT * FROM OrderHeader WHERE CustomerNo='{customerNo}'", cancellationToken);
+            var where = customerNo != null ? $" WHERE CustomerNo='{customerNo}'" : string.Empty;
+            var table = await GetDataAsync($"SELECT * FROM OrderHeader{where}", cancellationToken);
 
             foreach (DataRow row in table.Rows)
             {
