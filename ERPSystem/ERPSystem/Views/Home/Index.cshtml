@@ -1,39 +1,34 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
     
-    List<string> names = new List<string>()
-    {
-        "John Doe",
-        "Jane Doe",
-        "Joe Doe",
-        "Jenna Doe",
-        "Doggy Doe"
-    };
+    var orders = ViewData["Orders"] as OrderHeaderCollection; 
 }
-<div>
-    <h1 class="float-left">Orders (@names.Count)</h1>
-    <button type="button" class="btn btn-outline-info float-right">
+
+<div class="d-flex justify-content-between mb-3">
+    <h1>Orders (@orders.Count)</h1>
+    <button type="button" class="btn btn-outline-info">
         Add new order
     </button>
 </div>
-
 
 <table class="table table-striped">
     <thead>
     <tr>
         <th scope="col">Order ID</th>
-        <th scope="col">Customer Name</th>
+        <th scope="col">Customer No</th>
         <th scope="col">Order Status</th>
+        <th scope="col">Creation Date</th>
         <th scope="col"></th>
     </tr>
     </thead>
     <tbody>
-         @foreach (string name in names)
+         @foreach (var order in orders)
             {
                 <tr>
-                    <td>@name</td>
-                    <td></td>
-                    <td></td>
+                    <td>@order.OrderNo</td>
+                    <td>@order.CustomerNo</td>
+                    <td>@order.Status</td>
+                    <td>@order.CreationDate</td>
                     <td>
                         <div class="float-right">
                             <button type="button" class="btn btn-outline-success">

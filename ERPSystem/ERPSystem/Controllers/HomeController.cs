@@ -22,8 +22,8 @@ namespace ERPSystem.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var list = await SqlHelper.GetCustomersAsync(CancellationToken.None);
-
+            var orders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
+            ViewData["Orders"] = orders;
             return View();
         }
 
