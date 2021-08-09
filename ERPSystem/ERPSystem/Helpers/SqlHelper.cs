@@ -1,5 +1,6 @@
 ﻿using ERPSystem.Models;
 using Microsoft.Data.SqlClient;
+using System;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,16 +17,46 @@ namespace ERPSystem.Helpers
 
             var table = await GetDataAsync("SELECT * FROM OrderHeader", cancellationToken);
 
+            foreach (DataRow row in table.Rows)
+            {
+                var order = new OrderHeader();
+
+                order.OrderNo = (string)row["OrderNo"];
+                order.CustomerNo = (string)row["CustomerNo"];
+                order.CreationDate = (DateTime)row["CreationDate"];
+                order.Status = (string)row["Status"];
+                order.Carrier = (string)row["Carrier"];
+                order.Sequence = (int)row["Sequence"];
+                order.Items = await GetOrderItemsAsync(order.OrderNo, CancellationToken.None);
+
+                orders.Add(order);
+            }
+
             return orders;
         }
 
-        public static async Task<OrderItemCollection> GetOrderItemsAsync(CancellationToken cancellationToken)
+        public static async Task<OrderItemCollection> GetOrderItemsAsync(string orderNo, CancellationToken cancellationToken)
         {
-            var orderItems = new OrderItemCollection();
+            var items = new OrderItemCollection();
 
-            var table = await GetDataAsync("SELECT * FROM OrderItems", cancellationToken);
+            var table = await GetDataAsync($"SELECT * FROM OrderItem WHERE OrderNo='{orderNo}'", cancellationToken);
 
-            return orderItems;
+            foreach (DataRow row in table.Rows)
+            {
+                var item = new OrderItem();
+
+                item.OrderNo = (string)row["OrderNo"];
+                item.OrderPos = (string)row["OrderPos"];
+                item.Material = (string)row["Material"];
+                item.Description = (string)row["Description"];
+                item.Status = (string)row["Status"];
+                item.TargetQuantity = (int)row["TargetQuantity"];
+                item.CurrentQuantity = (int)row["CurrentQuantity"];
+
+                items.Add(item);
+            }
+
+            return items;
         }
 
         public static async Task<DataTable> GetDataAsync(string statement, CancellationToken cancellationToken)
