@@ -37,16 +37,18 @@
                     <td>@customer.Streetaddress</td>
                     <td>
                         <div class="float-right">
-                            <button type="button" class="btn btn-outline-success" data-toggle="tooltip" title="Edit current customer">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                             <span data-toggle="tooltip" title="Delete current customer">
-                                 <button class="btn btn-outline-danger deleteItem" data-toggle="modal" data-target="#modal-delete" 
-                                         data-id="@customer.CustomerNo"
-                                         data-path="@Url.Action("DeleteCustomer", "Home", new {customerNo = customer.CustomerNo})">
-                                        <i class="fas fa-user-slash"></i>
-                                    </button>
-                                </span>
+                            <span data-toggle="tooltip" title="Edit current customer">
+                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#modal-edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </span>
+                            <span data-toggle="tooltip" title="Delete current customer">
+                                <button class="btn btn-outline-danger deleteItem" data-toggle="modal" data-target="#modal-delete"
+                                        data-id="@customer.CustomerNo"
+                                        data-path="@Url.Action("DeleteCustomer", "Home", new {customerNo = customer.CustomerNo})">
+                                    <i class="fas fa-user-slash"></i>
+                                </button>
+                            </span>
                         </div>
                     </td>
                 </tr>
@@ -135,7 +137,7 @@
 @section Scripts
 {
     <script>
-        var path_to_delete;
+        let path_to_delete;
     
         $(".deleteItem").click(function(e) {
             path_to_delete = $(this).data('path');
