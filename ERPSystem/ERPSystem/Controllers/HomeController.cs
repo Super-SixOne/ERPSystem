@@ -55,6 +55,8 @@ namespace ERPSystem.Controllers
                     customer.CustomerNo = nextCustomerNumber.ToString();
                     break;
                 }
+
+                nextCustomerNumber++;
             }
 
             await SqlHelper.AddCustomerAsync(customer, CancellationToken.None);
