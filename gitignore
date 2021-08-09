@@ -30,5 +30,20 @@ msbuild.log
 msbuild.err
 msbuild.wrn
 
+# no build files
+obj/
+bin/
+/Build/
+Build/
+Debug/
+ClientBin/
+PreDestinationDirectory/
+TestResults/
+_ReSharper*
+pkg/
+pkgobj/
+testsettings/
+*.lock.json
+
 # Visual Studio 2015
 .vs/
