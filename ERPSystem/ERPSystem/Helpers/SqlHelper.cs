@@ -15,7 +15,7 @@ namespace ERPSystem.Helpers
         {
             var customers = new CustomerCollection();
 
-            var table = await GetDataAsync("SELECT * FROM Customers", cancellationToken);
+            var table = await GetDataAsync("SELECT * FROM Customer", cancellationToken);
 
             foreach (DataRow row in table.Rows)
             {
@@ -23,11 +23,10 @@ namespace ERPSystem.Helpers
 
                 customer.CustomerNo = (string)row["CustomerNo"];
                 customer.CustomerName = (string)row["CustomerName"];
-                customer.StreetAddress = (string)row["Streetadress"];
+                customer.Streetaddress = (string)row["Streetadress"];
                 customer.City = (string)row["City"];
                 customer.Country = (string)row["Country"];
-                customer.Vip = (bool)row["VIP"];
-                customer.Orders = await GetOrdersAsync(customer.CustomerNo, cancellationToken);
+                customer.VIP = (bool)row["VIP"];
 
                 customers.Add(customer);
             }
@@ -37,7 +36,7 @@ namespace ERPSystem.Helpers
 
         public static async Task<Customer> GetCustomerAsync(string customerNo, CancellationToken cancellationToken)
         {
-            var table = await GetDataAsync($"SELECT * FROM Customers WHERE CustomerNo='{customerNo}'", cancellationToken);
+            var table = await GetDataAsync($"SELECT * FROM Customer WHERE CustomerNo='{customerNo}'", cancellationToken);
 
             foreach (DataRow row in table.Rows)
             {
@@ -45,23 +44,28 @@ namespace ERPSystem.Helpers
 
                 customer.CustomerNo = (string)row["CustomerNo"];
                 customer.CustomerName = (string)row["CustomerName"];
-                customer.StreetAddress = (string)row["Streetadress"];
+                customer.Streetaddress = (string)row["Streetadress"];
                 customer.City = (string)row["City"];
                 customer.Country = (string)row["Country"];
-                customer.Vip = (bool)row["VIP"];
-                customer.Orders = await GetOrdersAsync(customer.CustomerNo, cancellationToken);
-                
+                customer.VIP = (bool)row["VIP"];
+
                 return customer;
             }
 
             return null;
         }
 
+        public static Task<OrderHeaderCollection> GetOrdersAsync(CancellationToken cancellationToken)
+        {
+            return GetOrdersAsync(null, cancellationToken);
+        }
+
         public static async Task<OrderHeaderCollection> GetOrdersAsync(string customerNo, CancellationToken cancellationToken)
         {
             var orders = new OrderHeaderCollection();
 
-            var table = await GetDataAsync($"SELECT * FROM OrderHeader WHERE CustomerNo='{customerNo}'", cancellationToken);
+            var where = customerNo != null ? $" WHERE CustomerNo='{customerNo}'" : string.Empty;
+            var table = await GetDataAsync($"SELECT * FROM OrderHeader{where}", cancellationToken);
 
             foreach (DataRow row in table.Rows)
             {
