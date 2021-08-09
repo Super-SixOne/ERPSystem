@@ -2,6 +2,7 @@
 using ERPSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,16 +18,16 @@ namespace ERPSystem.Controllers
         {
             _logger = logger;
         }
-        
+
         public IActionResult Index()
         {
             return View();
         }
-        
+
         public async Task<IActionResult> Orders()
         {
             var orders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
-            
+
             return View(orders);
         }
         public async Task<IActionResult> Customers()

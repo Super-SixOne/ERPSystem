@@ -57,7 +57,7 @@ namespace ERPSystem.Helpers
 
         public static async Task<int> DeleteCustomerAsync(string customerNo, CancellationToken cancellationToken)
         {
-            return await ExecuteNonQueryAsync($"DELETE FROM Customer WHERE CustomerNo = '{customerNo}'", cancellationToken);
+            return await ExecuteNonQueryAsync($"DELETE FROM Customer WHERE CustomerNo='{customerNo}'", cancellationToken);
         }
 
         public static async Task<CustomerCollection> GetCustomersAsync(CancellationToken cancellationToken)
@@ -108,6 +108,71 @@ namespace ERPSystem.Helpers
 
         #region CRUD Order / Items
 
+        public static async Task<int> AddOrderAsync(OrderHeader order, CancellationToken cancellationToken)
+        {
+            if (order != null)
+            {
+                var sql = new StringBuilder();
+
+                sql.Append($"INSERT INTO OrderHeader (OrderNo,CustomerNo,CreationDate,Status,Carrier,Sequence) VALUES (");
+                sql.Append($"'{order.OrderNo}',");
+                sql.Append($"'{order.CustomerNo}',");
+                sql.Append($"'{order.CreationDate}',");
+                sql.Append($"'{order.Status}',");
+                sql.Append($"'{order.Carrier}',");
+                sql.Append($"{order.Sequence}");
+                sql.Append(")");
+
+                var updates = await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
+
+                if (order.Items != null)
+                {
+                    foreach (var item in order.Items)
+                    {
+                        await AddOrderItemAsync(item, cancellationToken);
+                    }
+                }
+
+                return updates;
+            }
+
+            return 0;
+        }
+
+        public static async Task<int> UpdateOrderAsync(OrderHeader order, CancellationToken cancellationToken)
+        {
+            if (order != null)
+            {
+                var sql = new StringBuilder();
+
+                sql.Append($"UPDATE OrderHeader ");
+                sql.Append($"SET CustomerNo='{order.CustomerNo}',");
+                sql.Append($"Status='{order.Status}',");
+                sql.Append($"Carrier='{order.Carrier}',");
+                sql.Append($"Sequence={order.Sequence} ");
+                sql.Append($"WHERE OrderNo='{order.OrderNo}'");
+
+                var updates = await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
+
+                if (order.Items != null)
+                {
+                    foreach (var item in order.Items)
+                    {
+                        await UpdateOrderItemAsync(item, cancellationToken);
+                    }
+                }
+
+                return updates;
+            }
+
+            return 0;
+        }
+        public static async Task<int> DeleteOrderAsync(string orderNo, CancellationToken cancellationToken)
+        {
+            await ExecuteNonQueryAsync($"DELETE FROM OrderItem WHERE OrderNo='{orderNo}'", cancellationToken);
+            return await ExecuteNonQueryAsync($"DELETE FROM OrderHeader WHERE OrderNo='{orderNo}'", cancellationToken);
+        }
+
         public static Task<OrderHeaderCollection> GetOrdersAsync(CancellationToken cancellationToken)
         {
             return GetOrdersAsync(null, cancellationToken);
@@ -136,6 +201,53 @@ namespace ERPSystem.Helpers
             }
 
             return orders;
+        }
+
+        public static async Task<int> AddOrderItemAsync(OrderItem item, CancellationToken cancellationToken)
+        {
+            if (item != null)
+            {
+                var sql = new StringBuilder();
+
+                sql.Append($"INSERT INTO OrderItem (OrderNo,OrderPos,Material,Status,TargetQuantity,CurrentQuantity,NOKQuantity) VALUES (");
+                sql.Append($"'{item.OrderNo}',");
+                sql.Append($"'{item.OrderPos}',");
+                sql.Append($"'{item.Material}',");
+                sql.Append($"'{item.Status}',");
+                sql.Append($"{item.TargetQuantity},");
+                sql.Append($"{item.CurrentQuantity},");
+                sql.Append($"{item.NOKQuantity}");
+                sql.Append(")");
+
+                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
+            }
+
+            return 0;
+        }
+
+        public static async Task<int> UpdateOrderItemAsync(OrderItem item, CancellationToken cancellationToken)
+        {
+            if (item != null)
+            {
+                var sql = new StringBuilder();
+
+                sql.Append($"UPDATE OrderItem ");
+                sql.Append($"SET Material='{item.Material}',");
+                sql.Append($"Status='{item.Status}',");
+                sql.Append($"TargetQuantity={item.TargetQuantity},");
+                sql.Append($"CurrentQuantity={item.CurrentQuantity},");
+                sql.Append($"NOKQuantity={item.NOKQuantity} ");
+                sql.Append($"WHERE OrderNo='{item.OrderNo}' AND OrderPos='{item.OrderPos}'");
+
+                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
+            }
+
+            return 0;
+        }
+
+        public static async Task<int> DeleteOrderItemAsync(string orderNo, string orderPos, CancellationToken cancellationToken)
+        {
+            return await ExecuteNonQueryAsync($"DELETE FROM OrderItem WHERE OrderNo='{orderNo}' AND OrderPos='{orderPos}'", cancellationToken);
         }
 
         public static async Task<OrderItemCollection> GetOrderItemsAsync(string orderNo, CancellationToken cancellationToken)
