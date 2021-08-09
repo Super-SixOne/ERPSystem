@@ -58,8 +58,6 @@ namespace ERPSystem.Controllers
 
                 nextCustomerNumber++;
             }
-
-            //customer.VIP = "on" ? true : false;
             
             await SqlHelper.AddCustomerAsync(customer, CancellationToken.None);
 
