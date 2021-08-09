@@ -6,7 +6,7 @@
 
 <div class="d-flex justify-content-between mb-3">
     <h1>Orders (@orders.Count)</h1>
-    <button type="button" class="btn btn-outline-info">
+    <button type="button" class="btn btn-outline-dark">
         Add new order
     </button>
 </div>
@@ -31,12 +31,25 @@
                     <td>@order.CreationDate</td>
                     <td>
                         <div class="float-right">
-                            <button type="button" class="btn btn-outline-success">
-                                Edit
-                            </button>
-                            <button type="button" class="btn btn-outline-danger">
-                                Delete
-                            </button>
+                            @switch (order.Status)
+                            {
+                                case "created":
+                                    <button type="button" class="btn btn-outline-success">
+                                        Edit
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger">
+                                        Delete
+                                    </button>
+                                    break;
+                                case "active":
+                                case "completed":
+                                case "stored":
+                                case "loaded":
+                                    <button type="button" class="btn btn-outline-info">
+                                        View details
+                                    </button>
+                                    break;
+                            }
                         </div>
                     </td>
                 </tr>
