@@ -58,7 +58,7 @@ namespace ERPSystem.Controllers
 
             await SqlHelper.AddCustomerAsync(customer, CancellationToken.None);
 
-            return View();
+            return RedirectToAction("Customers");
         }
 
         public IActionResult AddOrder()
