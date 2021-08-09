@@ -1,8 +1,50 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    
+    List<string> names = new List<string>()
+    {
+        "John Doe",
+        "Jane Doe",
+        "Joe Doe",
+        "Jenna Doe",
+        "Doggy Doe"
+    };
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+    <h1 class="float-left">Orders (@names.Count)</h1>
+    <button type="button" class="btn btn-outline-info float-right">
+        Add new order
+    </button>
 </div>
+
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">Order ID</th>
+        <th scope="col">Customer Name</th>
+        <th scope="col">Order Status</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+         @foreach (string name in names)
+            {
+                <tr>
+                    <td>@name</td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <div class="float-right">
+                            <button type="button" class="btn btn-outline-success">
+                                Edit
+                            </button>
+                            <button type="button" class="btn btn-outline-danger">
+                                Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+    </tbody>
+</table>
