@@ -1569,23 +1569,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\prokhorova\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\goeggerle\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Source\\ERPSystem\\ERPSystem\\ERPSystem\\ERPSystem.csproj",
+      "projectUniqueName": "C:\\SOURCE\\ERPSystem\\ERPSystem\\ERPSystem\\ERPSystem.csproj",
       "projectName": "ERPSystem",
-      "projectPath": "C:\\Source\\ERPSystem\\ERPSystem\\ERPSystem\\ERPSystem.csproj",
-      "packagesPath": "C:\\Users\\prokhorova\\.nuget\\packages\\",
-      "outputPath": "C:\\Source\\ERPSystem\\ERPSystem\\ERPSystem\\obj\\",
+      "projectPath": "C:\\SOURCE\\ERPSystem\\ERPSystem\\ERPSystem\\ERPSystem.csproj",
+      "packagesPath": "C:\\Users\\goeggerle\\.nuget\\packages\\",
+      "outputPath": "C:\\SOURCE\\ERPSystem\\ERPSystem\\ERPSystem\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\prokhorova\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\goeggerle\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1597,6 +1598,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -1608,6 +1610,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Microsoft.Data.SqlClient": {
             "target": "Package",
@@ -1632,7 +1635,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.411\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
       }
     }
   }
