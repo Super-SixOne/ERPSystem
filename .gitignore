@@ -16,7 +16,6 @@ project.lock.json
 *.sln.docstates
 
 # Build results
-.idea
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -33,3 +32,6 @@ msbuild.wrn
 
 # Visual Studio 2015
 .vs/
+
+# Rider
+.idea
