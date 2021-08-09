@@ -5,8 +5,8 @@
 
 <div class="d-flex justify-content-between mb-3">
     <h1>Customers (@Model.Count)</h1>
-    <button type="button" class="btn btn-outline-dark">
-        Add new customer
+    <button type="button" class="btn btn-outline-dark" data-toggle="tooltip" title="Add new customer">
+        <i class="fas fa-user-plus"></i>
     </button>
 </div>
 
@@ -34,11 +34,11 @@
                     <td>@customer.Streetaddress</td>
                     <td>
                         <div class="float-right">
-                             <button type="button" class="btn btn-outline-success">
-                                Edit
+                             <button type="button" class="btn btn-outline-success" data-toggle="tooltip" title="Edit current customer">
+                                <i class="fas fa-edit"></i>
                             </button>
-                            <button type="button" class="btn btn-outline-danger">
-                                Delete
+                            <button type="button" class="btn btn-outline-danger" data-toggle="tooltip" title="Delete current customer">
+                                <i class="fas fa-user-slash"></i>
                             </button>
                         </div>
                     </td>

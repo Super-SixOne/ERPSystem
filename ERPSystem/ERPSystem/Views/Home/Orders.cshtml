@@ -5,8 +5,8 @@
 
 <div class="d-flex justify-content-between mb-3">
     <h1>Orders (@Model.Count)</h1>
-    <button type="button" class="btn btn-outline-dark">
-        Add new order
+    <button type="button" class="btn btn-outline-dark" data-toggle="tooltip" title="Add new order">
+        <i class="fas fa-plus-circle"></i>
     </button>
 </div>
 
@@ -33,19 +33,19 @@
                             @switch (order.Status)
                             {
                                 case "created":
-                                    <button type="button" class="btn btn-outline-success">
-                                        Edit
+                                    <button type="button" class="btn btn-outline-success" data-toggle="tooltip" title="Edit current order">
+                                        <i class="fas fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline-danger">
-                                        Delete
+                                    <button type="button" class="btn btn-outline-danger" data-toggle="tooltip" title="Stop current order">
+                                        <i class="fas fa-ban"></i>
                                     </button>
                                     break;
                                 case "active":
                                 case "completed":
                                 case "stored":
                                 case "loaded":
-                                    <button type="button" class="btn btn-outline-info">
-                                        View details
+                                    <button type="button" class="btn btn-outline-info" data-toggle="tooltip" title="View current order">
+                                        <i class="fas fa-info-circle"></i>
                                     </button>
                                     break;
                             }
