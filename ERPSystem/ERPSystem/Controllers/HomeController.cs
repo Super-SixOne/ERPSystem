@@ -1,10 +1,12 @@
-﻿using ERPSystem.Models;
+﻿using ERPSystem.Helpers;
+using ERPSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ERPSystem.Controllers
@@ -18,8 +20,10 @@ namespace ERPSystem.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var orders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
+
             return View();
         }
 
