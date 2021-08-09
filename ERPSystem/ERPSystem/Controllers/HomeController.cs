@@ -22,7 +22,7 @@ namespace ERPSystem.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var orders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
+            var list = await SqlHelper.GetCustomersAsync(CancellationToken.None);
 
             return View();
         }
