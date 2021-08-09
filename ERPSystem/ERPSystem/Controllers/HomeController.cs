@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ERPSystem.Controllers
 {
@@ -42,7 +43,21 @@ namespace ERPSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCustomer(Customer customer)
         {
+            var existingCustomers = await SqlHelper.GetCustomersAsync(CancellationToken.None);
+
+            int nextCustomerNumber = 1;
+
+            while(nextCustomerNumber < 10000000)
+            {
+                if(!existingCustomers.Any(c => c.CustomerNo == nextCustomerNumber.ToString()))
+                {
+                    customer.CustomerNo = nextCustomerNumber.ToString();
+                    break;
+                }
+            }
+
             await SqlHelper.AddCustomerAsync(customer, CancellationToken.None);
+
             return View();
         }
 
