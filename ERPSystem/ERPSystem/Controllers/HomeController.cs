@@ -21,7 +21,7 @@ namespace ERPSystem.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Orders");
         }
 
         public async Task<IActionResult> Orders()

@@ -12,6 +12,22 @@ namespace ERPSystem.Helpers
     {
         public const string ConnectionString = "Data Source=demo.peakboard.rocks;Initial Catalog=AMZDB;User ID=AMZAdmin;Password=Gengenbach2021";
 
+        public static async Task<OrderHeaderCollection> GetLastOrdersAsync(int number, CancellationToken cancellationToken)
+        {
+            var orders = new OrderHeaderCollection();
+
+            var table = await GetDataAsync($"SELECT TOP {(number < 1 ? 3 : number)} * FROM OrderHeader ORDER BY CreationDate DESC", cancellationToken);
+
+            foreach (DataRow row in table.Rows)
+            {
+                var order = await MapToOrderAsync(row, true, cancellationToken);
+
+                orders.Add(order);
+            }
+
+            return orders;
+        }
+
         #region CRUD Customer
 
         public static async Task<int> AddCustomerAsync(Customer customer, CancellationToken cancellationToken)
@@ -68,16 +84,7 @@ namespace ERPSystem.Helpers
 
             foreach (DataRow row in table.Rows)
             {
-                var customer = new Customer();
-
-                customer.CustomerNo = (string)row["CustomerNo"];
-                customer.CustomerName = (string)row["CustomerName"];
-                customer.Streetaddress = (string)row["Streetaddress"];
-                customer.City = (string)row["City"];
-                customer.Country = (string)row["Country"];
-                customer.VIP = (bool)row["VIP"];
-
-                customers.Add(customer);
+                customers.Add(MapToCustomer(row));
             }
 
             return customers;
@@ -89,16 +96,7 @@ namespace ERPSystem.Helpers
 
             foreach (DataRow row in table.Rows)
             {
-                var customer = new Customer();
-
-                customer.CustomerNo = (string)row["CustomerNo"];
-                customer.CustomerName = (string)row["CustomerName"];
-                customer.Streetaddress = (string)row["Streetaddress"];
-                customer.City = (string)row["City"];
-                customer.Country = (string)row["Country"];
-                customer.VIP = (bool)row["VIP"];
-
-                return customer;
+                return MapToCustomer(row);
             }
 
             return null;
@@ -187,15 +185,7 @@ namespace ERPSystem.Helpers
 
             foreach (DataRow row in table.Rows)
             {
-                var order = new OrderHeader();
-
-                order.OrderNo = (string)row["OrderNo"];
-                order.CustomerNo = (string)row["CustomerNo"];
-                order.CreationDate = (DateTime)row["CreationDate"];
-                order.Status = (string)row["Status"];
-                order.Carrier = (string)row["Carrier"];
-                order.Sequence = (int)row["Sequence"];
-                order.Items = await GetOrderItemsAsync(order.OrderNo, cancellationToken);
+                var order = await MapToOrderAsync(row, true, cancellationToken);
 
                 orders.Add(order);
             }
@@ -258,17 +248,7 @@ namespace ERPSystem.Helpers
 
             foreach (DataRow row in table.Rows)
             {
-                var item = new OrderItem();
-
-                item.OrderNo = (string)row["OrderNo"];
-                item.OrderPos = (string)row["OrderPos"];
-                item.Material = (string)row["Material"];
-                item.Status = (string)row["Status"];
-                item.TargetQuantity = (int)row["TargetQuantity"];
-                item.CurrentQuantity = (int)row["CurrentQuantity"];
-                item.NOKQuantity = (int)row["NOKQuantity"];
-
-                items.Add(item);
+                items.Add(MapToOrderItem(row));
             }
 
             return items;
@@ -303,6 +283,68 @@ namespace ERPSystem.Helpers
                     return await command.ExecuteNonQueryAsync(cancellationToken);
                 }
             }
+        }
+
+        public static Customer MapToCustomer(DataRow row)
+        {
+            var customer = new Customer();
+
+            customer.CustomerNo = (string)row["CustomerNo"];
+            customer.CustomerName = (string)row["CustomerName"];
+            customer.Streetaddress = (string)row["Streetaddress"];
+            customer.City = (string)row["City"];
+            customer.Country = (string)row["Country"];
+            customer.VIP = (bool)row["VIP"];
+
+            return customer;
+        }
+
+        public static OrderHeader MapToOrder(DataRow row)
+        {
+            var order = new OrderHeader();
+
+            order.OrderNo = (string)row["OrderNo"];
+            order.CustomerNo = (string)row["CustomerNo"];
+            order.CreationDate = (DateTime)row["CreationDate"];
+            order.Status = (string)row["Status"];
+            order.Carrier = (string)row["Carrier"];
+            order.Sequence = (int)row["Sequence"];
+
+            return order;
+        }
+
+        public static async Task<OrderHeader> MapToOrderAsync(DataRow row, bool loadItems, CancellationToken cancellationToken)
+        {
+            var order = new OrderHeader();
+
+            order.OrderNo = (string)row["OrderNo"];
+            order.CustomerNo = (string)row["CustomerNo"];
+            order.CreationDate = (DateTime)row["CreationDate"];
+            order.Status = (string)row["Status"];
+            order.Carrier = (string)row["Carrier"];
+            order.Sequence = (int)row["Sequence"];
+
+            if (loadItems)
+            {
+                order.Items = await GetOrderItemsAsync(order.OrderNo, cancellationToken);
+            }
+
+            return order;
+        }
+
+        public static OrderItem MapToOrderItem(DataRow row)
+        {
+            var item = new OrderItem();
+
+            item.OrderNo = (string)row["OrderNo"];
+            item.OrderPos = (string)row["OrderPos"];
+            item.Material = (string)row["Material"];
+            item.Status = (string)row["Status"];
+            item.TargetQuantity = (int)row["TargetQuantity"];
+            item.CurrentQuantity = (int)row["CurrentQuantity"];
+            item.NOKQuantity = (int)row["NOKQuantity"];
+
+            return item;
         }
 
         #endregion
