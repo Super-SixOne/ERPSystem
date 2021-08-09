@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using System;
 using System.Data;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +11,25 @@ namespace ERPSystem.Helpers
     static class SqlHelper
     {
         public const string ConnectionString = "Data Source=demo.peakboard.rocks;Initial Catalog=AMZDB;User ID=AMZAdmin;Password=Gengenbach2021";
+
+        public static async Task AddCustomerAsync(Customer customer, CancellationToken cancellationToken)
+        {
+            if (customer != null)
+            {
+                var sql = new StringBuilder();
+
+                sql.Append($"INSERT INTO Customer (CustomerNo,CustomerName,Streetaddress,City,Country,VIP) VALUES (");
+                sql.Append($"'{customer.CustomerNo}',");
+                sql.Append($"'{customer.CustomerName}',");
+                sql.Append($"'{customer.Streetaddress}',");
+                sql.Append($"'{customer.City}',");
+                sql.Append($"'{customer.Country}',");
+                sql.Append($"{(customer.VIP ? "1" : "0")}");
+                sql.Append(")");
+
+                await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
+            }
+        }
 
         public static async Task<CustomerCollection> GetCustomersAsync(CancellationToken cancellationToken)
         {
@@ -23,7 +43,7 @@ namespace ERPSystem.Helpers
 
                 customer.CustomerNo = (string)row["CustomerNo"];
                 customer.CustomerName = (string)row["CustomerName"];
-                customer.Streetaddress = (string)row["Streetadress"];
+                customer.Streetaddress = (string)row["Streetaddress"];
                 customer.City = (string)row["City"];
                 customer.Country = (string)row["Country"];
                 customer.VIP = (bool)row["VIP"];
@@ -44,7 +64,7 @@ namespace ERPSystem.Helpers
 
                 customer.CustomerNo = (string)row["CustomerNo"];
                 customer.CustomerName = (string)row["CustomerName"];
-                customer.Streetaddress = (string)row["Streetadress"];
+                customer.Streetaddress = (string)row["Streetaddress"];
                 customer.City = (string)row["City"];
                 customer.Country = (string)row["Country"];
                 customer.VIP = (bool)row["VIP"];
@@ -124,14 +144,14 @@ namespace ERPSystem.Helpers
         }
 
 
-        public static Task<int> ExecuteNonQueryAsync(string statement, CancellationToken cancellationToken)
+        public static async Task<int> ExecuteNonQueryAsync(string statement, CancellationToken cancellationToken)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 using (var command = new SqlCommand(statement, connection))
                 {
-                    connection.Open();
-                    return command.ExecuteNonQueryAsync(cancellationToken);
+                    await connection.OpenAsync();
+                    return await command.ExecuteNonQueryAsync(cancellationToken);
                 }
             }
         }
