@@ -27,18 +27,18 @@
                 <label for="CreationDate">Order Date</label>
                 <input type="datetime-local" class="form-control" id="CreationDate" name="CreationDate" required value="@Model.CreationDate">
             </div>       
+            @if (ExistingCustomers != null)
+            {
             <div class="form-group">
                 <label>Customer</label>
-                    @if (ExistingCustomers != null)
+                <select class="form-control">
+                    @foreach (var customer in ExistingCustomers)
                     {
-                    <select>
-                        @foreach (var customer in ExistingCustomers)
-                        {
-                            <option value="@customer.CustomerNo">@customer.CustomerName</option>
-                        }
-                    </select>
+                        <option value="@customer.CustomerNo">@customer.CustomerName</option>
                     }
-            </div>                                                
+                </select>
+            </div>   
+            }                                             
             <div class="form-group">
                 <label for="Sequence">Order Priority</label>
                 <input type="number" class="form-control" id="Sequence" name="Sequence" required value="@Model.Sequence">
