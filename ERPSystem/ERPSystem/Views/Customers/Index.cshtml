@@ -16,7 +16,7 @@
 <table class="table table-striped">
     <thead>
     <tr>
-        <th scope="col">VIP</th>
+        <th scope="col" class="text-center">VIP</th>
         <th scope="col">Customer No</th>
         <th scope="col">Customer Name</th>
         <th scope="col">Country</th>
@@ -29,7 +29,7 @@
          @foreach (var customer in Model)
             {
                 <tr>
-                    <td>@if (customer.VIP) {<i class="fas fa-gem"></i>}</td>
+                    <td class="text-center">@if (customer.VIP) {<i class="fas fa-gem"></i>}</td>
                     <td>@customer.CustomerNo</td>
                     <td>@customer.CustomerName</td>
                     <td>@customer.Country</td>

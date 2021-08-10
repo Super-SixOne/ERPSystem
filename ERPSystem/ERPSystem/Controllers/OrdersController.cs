@@ -66,5 +66,12 @@ namespace ERPSystem.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewOrder(string orderNo)
+        {
+
+            return PartialView("OrderDetailedView");
+        }
     }
 }

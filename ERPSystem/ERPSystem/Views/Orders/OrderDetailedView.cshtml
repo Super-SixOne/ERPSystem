@@ -1,0 +1,26 @@
+﻿@model ERPSystem.Models.OrderHeader
+
+<div class="row">
+    <div class="col-6">
+        <h3>Order No: @Model.OrderNo</h3>
+    </div>
+    <div class="col-6 text-right">
+        <h3>Customer No: @Model.CustomerNo</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <h5>Creation Date: @Model.CreationDate</h5>
+    </div>
+    <div class="col-6 text-right">
+        <h5>Status: @Model.Status</h5>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <h5>Carrier: @Model.Carrier</h5>
+    </div>
+    <div class="col-6 text-right">
+        <h5>Priority: @Model.Sequence</h5>
+    </div>
+</div>

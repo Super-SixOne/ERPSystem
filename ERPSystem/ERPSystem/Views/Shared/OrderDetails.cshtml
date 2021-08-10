@@ -2,7 +2,7 @@
 
 @using (Html.BeginForm("AddUpdateOrder", "Orders", FormMethod.Post))
 {
-    
+    <input type="hidden" name="OrderNo" value="@Model.OrderNo"/>
     
     <div class="modal-footer" style="margin-left: -1rem; margin-right: -1rem;">
         <button type="submit" class="btn btn-outline-primary">Submit</button>

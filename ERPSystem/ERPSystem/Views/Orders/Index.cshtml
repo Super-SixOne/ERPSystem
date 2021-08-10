@@ -16,6 +16,7 @@
 <table class="table table-striped">
     <thead>
     <tr>
+        <th scope="col" style="width: 66px"></th>
         <th scope="col">Order ID</th>
         <th scope="col">Customer No</th>
         <th scope="col">Order Status</th>
@@ -27,9 +28,14 @@
     @foreach (var order in Model)
     {
         <tr>
-            <td>@order.OrderNo</td>
-            <td>@order.CustomerNo</td>
-            <td>
+            <td class="align-middle">
+                <button type="button" class="btn btn-outline-info" data-toggle="tooltip" title="View current order">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </td>
+            <td class="align-middle">@order.OrderNo</td>
+            <td class="align-middle">@order.CustomerNo</td>
+            <td class="align-middle">
                 @switch (order.Status)
                 {
                     case "created":
@@ -49,8 +55,8 @@
                         break;
                 }
             </td>
-            <td>@order.CreationDate</td>
-            <td>
+            <td class="align-middle">@order.CreationDate</td>
+            <td class="align-middle">
                 <div class="float-right">
                     @switch (order.Status)
                     {
@@ -70,9 +76,6 @@
                         case "completed":
                         case "stored":
                         case "loaded":
-                            <button type="button" class="btn btn-outline-info" data-toggle="tooltip" title="View current order">
-                                <i class="fas fa-info-circle"></i>
-                            </button>
                             break;
                     }
                 </div>
