@@ -70,8 +70,8 @@ namespace ERPSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewOrder(string orderNo)
         {
-
-            return PartialView("OrderDetailedView");
+            var order = await SqlHelper.GetOrderAsync(orderNo, CancellationToken.None);
+            return View("OrderDetailedView", order);
         }
     }
 }

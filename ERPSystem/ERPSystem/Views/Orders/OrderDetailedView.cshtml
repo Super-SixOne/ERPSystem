@@ -1,26 +1,38 @@
 ﻿@model ERPSystem.Models.OrderHeader
+@{
+    ViewData["Title"] = "Details for Order No: " + Model.OrderNo;
+}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Orders" asp-action="Index">Orders</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Order No @Model.OrderNo</li>
+    </ol>
+</nav>
 
-<div class="row">
-    <div class="col-6">
-        <h3>Order No: @Model.OrderNo</h3>
+<div>
+    <div class="row">
+        <div class="col-6">
+            <h3>Order No: @Model.OrderNo</h3>
+        </div>
+        <div class="col-6 text-right">
+            <h3>Customer No: @Model.CustomerNo</h3>
+        </div>
     </div>
-    <div class="col-6 text-right">
-        <h3>Customer No: @Model.CustomerNo</h3>
+    <div class="row">
+        <div class="col-6">
+            <h5>Creation Date: @Model.CreationDate</h5>
+        </div>
+        <div class="col-6 text-right">
+            <h5>Status: @Model.Status</h5>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-6">
-        <h5>Creation Date: @Model.CreationDate</h5>
-    </div>
-    <div class="col-6 text-right">
-        <h5>Status: @Model.Status</h5>
-    </div>
-</div>
-<div class="row">
-    <div class="col-6">
-        <h5>Carrier: @Model.Carrier</h5>
-    </div>
-    <div class="col-6 text-right">
-        <h5>Priority: @Model.Sequence</h5>
+    <div class="row">
+        <div class="col-6">
+            <h5>Carrier: @Model.Carrier</h5>
+        </div>
+        <div class="col-6 text-right">
+            <h5>Priority: @Model.Sequence</h5>
+        </div>
     </div>
 </div>
