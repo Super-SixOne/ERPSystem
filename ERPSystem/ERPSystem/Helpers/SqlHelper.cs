@@ -258,7 +258,12 @@ namespace ERPSystem.Helpers
 
         public static async Task<OrderHeader> GetOrderAsync(string orderNo, CancellationToken cancellationToken)
         {
-            var table = await GetDataAsync($"SELECT * FROM OrderHeader WHERE OrderNo='{orderNo}'", cancellationToken);
+            List<SqlParameter> parameters = new List<SqlParameter>()
+            {
+                new SqlParameter("orderNo", orderNo)
+            };
+
+            var table = await GetDataAsync($"SELECT * FROM OrderHeader WHERE OrderNo=@orderNo", cancellationToken, parameters);
 
             foreach (DataRow row in table.Rows)
             {
