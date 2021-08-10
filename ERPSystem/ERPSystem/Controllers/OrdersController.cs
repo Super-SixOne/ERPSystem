@@ -20,7 +20,7 @@ namespace ERPSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddOrder(OrderHeader order)
+        public async Task<IActionResult> AddUpdateOrder(OrderHeader order)
         {
             if (order.OrderNo == null)
             {
@@ -48,6 +48,16 @@ namespace ERPSystem.Controllers
             return RedirectToAction("Index");
         }
 
+
+        public async Task<IActionResult> AddEditOrder(string orderNo)
+        {
+            var existingOrders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
+
+            var model = existingOrders.FirstOrDefault(c => c.OrderNo == orderNo) ?? new OrderHeader();
+
+            return PartialView("OrderDetails", model);
+        }
+        
         [HttpPost]
         public async Task<IActionResult> EditOrder(string orderNo)
         {

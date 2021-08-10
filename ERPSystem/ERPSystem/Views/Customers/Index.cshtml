@@ -6,8 +6,8 @@
 <div class="d-flex justify-content-between mb-3">
     <h1>Customers (@Model.Count)</h1>
     
-    <span data-toggle="tooltip" title="Add new customer">
-        <button class="btn btn-outline-dark" data-toggle="modal" data-target="#modal-edit" onclick="AddEditEmployee()">
+    <span class="align-self-center" data-toggle="tooltip" title="Add new customer">
+        <button class="btn btn-outline-dark" data-toggle="modal" data-target="#modal-edit" onclick="AddEditCustomer()">
             <i class="fas fa-user-plus"></i>
         </button>
     </span>
@@ -39,7 +39,7 @@
                         <div class="float-right">
                             <span data-toggle="tooltip" title="Edit current customer">
                                 <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#modal-edit"
-                                        onclick="AddEditEmployee(@customer.CustomerNo)">
+                                        onclick="AddEditCustomer(@customer.CustomerNo)">
                                     <i class="fas fa-edit"></i>
                                 </button>
                             </span>
@@ -103,7 +103,7 @@
             window.location = path_to_delete;
         });
         
-        let AddEditEmployee=function(employeeId){
+        let AddEditCustomer=function(employeeId){
             
             let url="/Customers/AddEditCustomer?CustomerNo="+employeeId;
     

@@ -21,7 +21,26 @@
                     <tr>
                         <td>@order.OrderNo</td>
                         <td>@order.CustomerNo</td>
-                        <td>@order.Status</td>
+                         <td>
+                            @switch (order.Status)
+                            {
+                                case "created":
+                                    <span style="color: #0f6674">@order.Status</span>
+                                    break;
+                                case "active":
+                                    <span style="color: #3dc89e">@order.Status</span>
+                                    break;
+                                case "completed":
+                                    <span style="color: darkseagreen">@order.Status</span>
+                                    break;
+                                case "stored":
+                                    <span style="color: #1c7430">@order.Status</span>
+                                    break;
+                                case "loaded":
+                                    <span style="color: rebeccapurple">@order.Status</span>
+                                    break;
+                            }
+                        </td>
                         <td>@order.CreationDate</td>
                     </tr>
                 }

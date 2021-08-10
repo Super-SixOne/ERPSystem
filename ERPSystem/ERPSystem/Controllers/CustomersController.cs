@@ -45,11 +45,11 @@ namespace ERPSystem.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> AddEditCustomer(string CustomerNo)
+        public async Task<IActionResult> AddEditCustomer(string customerNo)
         {
             var existingCustomers = await SqlHelper.GetCustomersAsync(CancellationToken.None);
 
-            var model = existingCustomers.FirstOrDefault(c => c.CustomerNo == CustomerNo) ?? new Customer();
+            var model = existingCustomers.FirstOrDefault(c => c.CustomerNo == customerNo) ?? new Customer();
 
             return PartialView("CustomerDetails", model);
         }
