@@ -57,7 +57,7 @@ namespace ERPSystem.Helpers
                 sql.Append($"@vip");
                 sql.Append(")");
 
-                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken , parameters);
+                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken, parameters);
             }
 
             return 0;
@@ -130,6 +130,24 @@ namespace ERPSystem.Helpers
             foreach (DataRow row in table.Rows)
             {
                 return MapToCustomer(row);
+            }
+
+            return null;
+        }
+
+        public static async Task<Material> GetMaterialAsync(string materialNo, CancellationToken cancellationToken)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>()
+            {
+                new SqlParameter("materialNo", materialNo)
+
+            };
+
+            var table = await GetDataAsync($"SELECT * FROM Material WHERE MaterialNo=@materialNo", cancellationToken, parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                return MapToMaterial(row);
             }
 
             return null;
@@ -283,18 +301,16 @@ namespace ERPSystem.Helpers
                     new SqlParameter("orderPos", item.OrderPos),
                     new SqlParameter("material", item.Material),
                     new SqlParameter("status", item.Status),
-                    new SqlParameter("targetQuantity", item.TargetQuantity),
                     new SqlParameter("nokQuantity", item.NOKQuantity),
                 };
 
                 var sql = new StringBuilder();
 
-                sql.Append($"INSERT INTO OrderItem (OrderNo,OrderPos,Material,Status,TargetQuantity,NOKQuantity) VALUES (");
+                sql.Append($"INSERT INTO OrderItem (OrderNo,OrderPos,Material,Status,NOKQuantity) VALUES (");
                 sql.Append($"@orderNo,");
                 sql.Append($"@orderPos,");
                 sql.Append($"@material,");
                 sql.Append($"@status,");
-                sql.Append($"@targetQuantity,");
                 sql.Append($"@nokQuantity");
                 sql.Append(")");
 
@@ -312,7 +328,6 @@ namespace ERPSystem.Helpers
                 {
                     new SqlParameter("material", item.Material),
                     new SqlParameter("status", item.Status),
-                    new SqlParameter("targetQuantity", item.TargetQuantity),
                     new SqlParameter("nokQuantity", item.NOKQuantity),
                     new SqlParameter("orderNo", item.OrderNo),
                     new SqlParameter("orderPos", item.OrderPos)
@@ -323,7 +338,6 @@ namespace ERPSystem.Helpers
                 sql.Append($"UPDATE OrderItem ");
                 sql.Append($"SET Material=@material,");
                 sql.Append($"Status=@status,");
-                sql.Append($"TargetQuantity=@targetQuantity,");
                 sql.Append($"NOKQuantity=@nokQuantity ");
                 sql.Append($"WHERE OrderNo=@orderNo AND OrderPos=@orderPos");
 
@@ -375,7 +389,7 @@ namespace ERPSystem.Helpers
             {
                 using var adapter = new SqlDataAdapter(statement, connection);
 
-                if(parameters != null)
+                if (parameters != null)
                 {
                     foreach (SqlParameter parameter in parameters)
                     {
@@ -397,7 +411,7 @@ namespace ERPSystem.Helpers
             {
                 using (var command = new SqlCommand(statement, connection))
                 {
-                    if(parameters != null)
+                    if (parameters != null)
                     {
                         foreach (SqlParameter parameter in parameters)
                         {
@@ -411,7 +425,7 @@ namespace ERPSystem.Helpers
             }
         }
 
-        public static Customer MapToCustomer(DataRow row)
+        private static Customer MapToCustomer(DataRow row)
         {
             var customer = new Customer();
 
@@ -425,7 +439,7 @@ namespace ERPSystem.Helpers
             return customer;
         }
 
-        public static OrderHeader MapToOrder(DataRow row)
+        private static OrderHeader MapToOrder(DataRow row)
         {
             var order = new OrderHeader();
 
@@ -439,15 +453,15 @@ namespace ERPSystem.Helpers
             return order;
         }
 
-        public static async Task<OrderHeader> MapToOrderAsync(DataRow row, bool loadItems, CancellationToken cancellationToken)
+        private static async Task<OrderHeader> MapToOrderAsync(DataRow row, bool loadItems, CancellationToken cancellationToken)
         {
             var order = new OrderHeader();
 
             order.OrderNo = (string)row["OrderNo"];
             order.CustomerNo = (string)row["CustomerNo"];
             order.CreationDate = (DateTime)row["CreationDate"];
-            order.Status = (string)row["Status"];
-            order.Carrier = (string)row["Carrier"];
+            order.Status = MayConvertDBNull<string>(row["Status"]);
+            order.Carrier = MayConvertDBNull<string>(row["Carrier"]);
             order.Sequence = (int)row["Sequence"];
 
             if (loadItems)
@@ -458,18 +472,45 @@ namespace ERPSystem.Helpers
             return order;
         }
 
-        public static OrderItem MapToOrderItem(DataRow row)
+        private static OrderItem MapToOrderItem(DataRow row)
         {
             var item = new OrderItem();
 
             item.OrderNo = (string)row["OrderNo"];
             item.OrderPos = (string)row["OrderPos"];
             item.Material = (string)row["Material"];
-            item.Status = (string)row["Status"];
-            item.TargetQuantity = (int)row["TargetQuantity"];
-            item.NOKQuantity = (int)row["NOKQuantity"];
+            item.Status = MayConvertDBNull<string>(row["Status"]);
+            item.NOKQuantity = MayConvertDBNull(row["NOKQuantity"], 0);
 
             return item;
+        }
+
+        private static Material MapToMaterial(DataRow row)
+        {
+            var material = new Material();
+
+            material.MaterialNo = (string)row["MaterialNo"];
+            material.MaterialType = (string)row["MaterialType"];
+            material.Description = (string)row["Description"];
+            material.QualityInstructions = (string)row["QualityInstructions"];
+            material.TechnicalDrawingURL = (string)row["TechnicalDrawingURL"];
+
+            return material;
+        }
+
+        private static T MayConvertDBNull<T>(object dbValue)
+        {
+            return MayConvertDBNull<T>(dbValue, default(T));
+        }
+
+        private static T MayConvertDBNull<T>(object dbValue, T defaultValue)
+        {
+            if (dbValue is DBNull)
+            {
+                return defaultValue;
+            }
+
+            return (T)dbValue;
         }
 
         #endregion
