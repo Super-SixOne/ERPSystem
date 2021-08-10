@@ -48,14 +48,13 @@ namespace ERPSystem.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
         public async Task<IActionResult> AddEditOrder(string orderNo)
         {
             var existingOrders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
 
             var model = existingOrders.FirstOrDefault(c => c.OrderNo == orderNo) ?? new OrderHeader();
 
-            return PartialView("OrderDetails", model);
+            return View("OrderEditingView", model);
         }
         
 

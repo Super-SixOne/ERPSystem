@@ -13,9 +13,9 @@
     <h1>Orders (@Model.Count)</h1>
     
     <span class="align-self-center" data-toggle="tooltip" title="Add new order">
-        <button class="btn btn-outline-dark" data-toggle="modal" data-target="#modal-edit" onclick="AddEditOrder()">
+        <a class="btn btn-outline-dark" asp-action="AddEditOrder">
             <i class="fas fa-plus-circle"></i>
-        </button>
+        </a>
     </span>
 </div>
 
@@ -67,9 +67,9 @@
                     @switch (order.Status)
                     {
                         case "created":
-                            <button type="button" class="btn btn-outline-success" data-toggle="tooltip" title="Edit current order">
+                            <a type="button" class="btn btn-outline-success" data-toggle="tooltip" title="Edit current order" asp-action="AddEditOrder" asp-route-orderNo="@order.OrderNo">
                                 <i class="fas fa-edit"></i>
-                            </button>
+                            </a>
                             <span data-toggle="tooltip" title="Delete current order">
                                 <button class="btn btn-outline-danger deleteItem" data-toggle="modal" data-target="#modal-delete"
                                         data-id="@order.OrderNo"
@@ -110,20 +110,6 @@
     </div>
 </div>
 
-
-<div class="modal fade" id="modal-edit" tabindex="-1" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Customer dialog</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body" id="modalEditBody">
-            </div>
-        </div>
-    </div>
-</div>
-
 @section Scripts
 {
     <script>
@@ -136,15 +122,5 @@
         $('#btnContinueDelete').click(function () {
             window.location = path_to_delete;
         });
-        
-        let AddEditOrder=function(orderId){
-            
-            let url="/Orders/AddEditOrder?OrderNo="+orderId;
-    
-            $("#modalEditBody").load(url,function(){
-                $("#modal-edit").modal("show");
-            })
-    
-        }
     </script>
 }

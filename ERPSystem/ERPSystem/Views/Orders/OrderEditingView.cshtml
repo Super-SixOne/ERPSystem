@@ -1,0 +1,52 @@
+﻿@model ERPSystem.Models.OrderHeader
+@{
+    ViewData["Title"] = Model.OrderNo != null ? "Details for Order No: " + Model.OrderNo : "New Order";
+}
+<nav aria-label="breadcrumb mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Orders" asp-action="Index">Orders</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@if (Model.OrderNo != null)
+            {
+                <span>Order No @Model.OrderNo</span>
+            }
+            else
+            {
+                <span>New Order</span>
+            }</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("AddUpdateOrder", "Orders", FormMethod.Post))
+{
+    <input type="hidden" name="OrderNo" value="@Model.OrderNo"/>
+    <div class="form-group row">
+        <label for="CreationDate" class="col-sm-3 col-form-label">Order Date</label>
+        <div class="col-sm-9">
+            <input type="datetime-local" class="form-control" id="CreationDate" name="CreationDate" required value="@Model.CreationDate">
+        </div>
+    </div>       
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Customer</label>
+        <div class="col-sm-9">
+            
+        </div>
+    </div>                                                
+    <div class="form-group row">
+        <label for="Sequence" class="col-sm-3 col-form-label">Order Priority</label>
+        <div class="col-sm-9">
+            <input type="number" class="form-control" id="Sequence" name="Sequence" required value="@Model.Sequence">
+        </div>
+    </div>                                                           
+    <div class="form-group row">
+        <label for="Carrier" class="col-sm-3 col-form-label">Carrier</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="Carrier" name="Carrier" required value="@Model.Carrier">
+        </div>
+    </div>  
+    
+    <div class="modal-footer" style="margin-left: -1rem; margin-right: -1rem;">
+        <button type="submit" class="btn btn-outline-primary">Submit</button>
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+    </div>
+}
