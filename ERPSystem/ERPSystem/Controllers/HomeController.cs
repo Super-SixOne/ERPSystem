@@ -21,27 +21,9 @@ namespace ERPSystem.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("Orders");
-        }
-
-        public async Task<IActionResult> Orders()
-        {
-            var orders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
-
-            return View(orders);
-        }
-        
-
-        public IActionResult AddOrder()
-        {
             return View();
         }
 
-        [HttpPost]
-        public IActionResult AddOrder(OrderHeader order)
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
