@@ -135,6 +135,24 @@ namespace ERPSystem.Helpers
             return null;
         }
 
+        public static async Task<Material> GetMaterialAsync(string materialNo, CancellationToken cancellationToken)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>()
+            {
+                new SqlParameter("materialNo", materialNo)
+
+            };
+
+            var table = await GetDataAsync($"SELECT * FROM Material WHERE MaterialNo=@materialNo", cancellationToken, parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                return MapToMaterial(row);
+            }
+
+            return null;
+        }
+
         #endregion
 
         #region CRUD Order / Items
