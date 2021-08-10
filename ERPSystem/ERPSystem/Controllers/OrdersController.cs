@@ -22,7 +22,30 @@ namespace ERPSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOrder(OrderHeader order)
         {
-            return View();
+            if (order.OrderNo == null)
+            {
+                var existingOrders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
+
+                int nextOrderNumber = 1;
+
+                while (nextOrderNumber < 10000000)
+                {
+                    if (!existingOrders.Any(o => o.OrderNo == nextOrderNumber.ToString()))
+                    {
+                        order.OrderNo = nextOrderNumber.ToString();
+                        break;
+                    }
+
+                    nextOrderNumber++;
+                }
+
+                await SqlHelper.AddOrderAsync(order, CancellationToken.None);
+            }
+            else
+            {
+                await SqlHelper.UpdateOrderAsync(order, CancellationToken.None);
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
