@@ -58,9 +58,13 @@
                             <button type="button" class="btn btn-outline-success" data-toggle="tooltip" title="Edit current order">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button type="button" class="btn btn-outline-danger" data-toggle="tooltip" title="Stop current order">
-                                <i class="fas fa-ban"></i>
-                            </button>
+                            <span data-toggle="tooltip" title="Delete current order">
+                                <button class="btn btn-outline-danger deleteItem" data-toggle="modal" data-target="#modal-delete"
+                                        data-id="@order.OrderNo"
+                                        data-path="@Url.Action("DeleteOrder", "Orders", new {orderNo = order.OrderNo})">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                            </span>
                             break;
                         case "active":
                         case "completed":
