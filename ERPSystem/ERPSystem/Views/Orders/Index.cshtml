@@ -3,6 +3,12 @@
     ViewData["Title"] = "Orders";
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Orders</li>
+    </ol>
+</nav>
 <div class="d-flex justify-content-between mb-3">
     <h1>Orders (@Model.Count)</h1>
     
@@ -29,9 +35,9 @@
     {
         <tr>
             <td class="align-middle">
-                <button type="button" class="btn btn-outline-info" data-toggle="tooltip" title="View current order">
+                <a class="btn btn-outline-info" data-toggle="tooltip" title="View current order" asp-controller="Orders" asp-action="ViewOrder" asp-route-orderNo="@order.OrderNo">
                     <i class="fas fa-info-circle"></i>
-                </button>
+                </a>
             </td>
             <td class="align-middle">@order.OrderNo</td>
             <td class="align-middle">@order.CustomerNo</td>

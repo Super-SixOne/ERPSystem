@@ -3,6 +3,13 @@
     ViewData["Title"] = "Customers";
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Customers</li>
+    </ol>
+</nav>
+
 <div class="d-flex justify-content-between mb-3">
     <h1>Customers (@Model.Count)</h1>
     
