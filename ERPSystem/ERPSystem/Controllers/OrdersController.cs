@@ -49,13 +49,13 @@ namespace ERPSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditOrder(OrderHeader order)
+        public async Task<IActionResult> EditOrder(string orderNo)
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteOrder(OrderHeader order)
+        public async Task<IActionResult> DeleteOrder(string orderNo)
         {
             return View();
         }
