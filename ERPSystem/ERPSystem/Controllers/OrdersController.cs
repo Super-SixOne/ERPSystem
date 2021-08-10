@@ -12,7 +12,7 @@ namespace ERPSystem.Controllers
     public class OrdersController : Controller
     {
         [HttpGet]
-        public async Task<IActionResult> Orders(OrderHeader order)
+        public async Task<IActionResult> Index()
         {
             var orders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
 
