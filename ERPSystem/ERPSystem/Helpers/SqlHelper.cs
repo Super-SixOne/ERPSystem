@@ -284,19 +284,17 @@ namespace ERPSystem.Helpers
                     new SqlParameter("material", item.Material),
                     new SqlParameter("status", item.Status),
                     new SqlParameter("targetQuantity", item.TargetQuantity),
-                    new SqlParameter("currentQuantity", item.CurrentQuantity),
                     new SqlParameter("nokQuantity", item.NOKQuantity),
                 };
 
                 var sql = new StringBuilder();
 
-                sql.Append($"INSERT INTO OrderItem (OrderNo,OrderPos,Material,Status,TargetQuantity,CurrentQuantity,NOKQuantity) VALUES (");
+                sql.Append($"INSERT INTO OrderItem (OrderNo,OrderPos,Material,Status,TargetQuantity,NOKQuantity) VALUES (");
                 sql.Append($"@orderNo,");
                 sql.Append($"@orderPos,");
                 sql.Append($"@material,");
                 sql.Append($"@status,");
                 sql.Append($"@targetQuantity,");
-                sql.Append($"@currentQuantity,");
                 sql.Append($"@nokQuantity");
                 sql.Append(")");
 
@@ -315,7 +313,6 @@ namespace ERPSystem.Helpers
                     new SqlParameter("material", item.Material),
                     new SqlParameter("status", item.Status),
                     new SqlParameter("targetQuantity", item.TargetQuantity),
-                    new SqlParameter("currentQuantity", item.CurrentQuantity),
                     new SqlParameter("nokQuantity", item.NOKQuantity),
                     new SqlParameter("orderNo", item.OrderNo),
                     new SqlParameter("orderPos", item.OrderPos)
@@ -327,7 +324,6 @@ namespace ERPSystem.Helpers
                 sql.Append($"SET Material=@material,");
                 sql.Append($"Status=@status,");
                 sql.Append($"TargetQuantity=@targetQuantity,");
-                sql.Append($"CurrentQuantity=@currentQuantity,");
                 sql.Append($"NOKQuantity=@nokQuantity ");
                 sql.Append($"WHERE OrderNo=@orderNo AND OrderPos=@orderPos");
 
@@ -471,7 +467,6 @@ namespace ERPSystem.Helpers
             item.Material = (string)row["Material"];
             item.Status = (string)row["Status"];
             item.TargetQuantity = (int)row["TargetQuantity"];
-            item.CurrentQuantity = (int)row["CurrentQuantity"];
             item.NOKQuantity = (int)row["NOKQuantity"];
 
             return item;

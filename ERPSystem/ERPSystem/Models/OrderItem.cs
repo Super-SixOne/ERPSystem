@@ -7,7 +7,6 @@
         public string? Material { get; set; }
         public string? Status { get; set; }
         public int? TargetQuantity { get; set; }
-        public int? CurrentQuantity { get; set; }
         public int? NOKQuantity { get; set; }
     }
 }
