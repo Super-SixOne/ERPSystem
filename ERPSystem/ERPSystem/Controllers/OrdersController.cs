@@ -51,13 +51,19 @@ namespace ERPSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> EditOrder(string orderNo)
         {
-            return View();
+            var existingOrders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
+
+            var model = existingOrders.FirstOrDefault(o => o.OrderNo == orderNo) ?? new OrderHeader();
+
+            return PartialView("OrderDetails", model);
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteOrder(string orderNo)
         {
-            return View();
+            await SqlHelper.DeleteOrderAsync(orderNo, CancellationToken.None);
+
+            return RedirectToAction("Index");
         }
     }
 }
