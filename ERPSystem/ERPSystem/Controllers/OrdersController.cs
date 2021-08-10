@@ -48,7 +48,7 @@ namespace ERPSystem.Controllers
             return RedirectToAction("Index");
         }
 
-
+        [HttpPost]
         public async Task<IActionResult> AddEditOrder(string orderNo)
         {
             var existingOrders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
@@ -58,15 +58,6 @@ namespace ERPSystem.Controllers
             return PartialView("OrderDetails", model);
         }
         
-        [HttpPost]
-        public async Task<IActionResult> EditOrder(string orderNo)
-        {
-            var existingOrders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
-
-            var model = existingOrders.FirstOrDefault(o => o.OrderNo == orderNo) ?? new OrderHeader();
-
-            return PartialView("OrderDetails", model);
-        }
 
         [HttpPost]
         public async Task<IActionResult> DeleteOrder(string orderNo)
