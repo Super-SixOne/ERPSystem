@@ -22,7 +22,8 @@
 {
     <div class="row">
         <div class="col-4">
-            <input type="hidden" name="OrderNo" value="@Model.OrderNo"/>
+            <input type="hidden" name="OrderNo" id="OrderNo" value="@Model.OrderNo"/>
+            <input type="hidden" name="Status" id="Status" value="null"/>
             <div class="form-group">
                 <label for="CreationDate">Order Date</label>
                 <input type="datetime-local" class="form-control" id="CreationDate" name="CreationDate" required value="@Model.CreationDate">
@@ -31,7 +32,7 @@
             {
             <div class="form-group">
                 <label>Customer</label>
-                <select class="form-control">
+                <select class="form-control" id="CustomerNo" name="CustomerNo" required asp-for="CustomerNo">
                     @foreach (var customer in ExistingCustomers)
                     {
                         <option value="@customer.CustomerNo">@customer.CustomerName</option>
@@ -63,7 +64,17 @@
                 </span>
             </div>
 
-            
+            <table class="table table-striped">
+                <thead>
+                    <th>Material</th>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        @await Html.PartialAsync("OrderItemDetails", item)
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 }

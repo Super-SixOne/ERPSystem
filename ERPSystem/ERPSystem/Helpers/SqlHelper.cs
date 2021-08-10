@@ -43,7 +43,6 @@ namespace ERPSystem.Helpers
                     new SqlParameter("city", customer.City),
                     new SqlParameter("country", customer.Country),
                     new SqlParameter("vip", customer.VIP ? "1" : "0")
-
                 };
 
                 var sql = new StringBuilder();
@@ -169,7 +168,6 @@ namespace ERPSystem.Helpers
                     new SqlParameter("status", order.Status),
                     new SqlParameter("carrier", order.Carrier),
                     new SqlParameter("sequence", order.Sequence)
-
                 };
 
                 var sql = new StringBuilder();
@@ -299,17 +297,17 @@ namespace ERPSystem.Helpers
                 {
                     new SqlParameter("orderNo", item.OrderNo),
                     new SqlParameter("orderPos", item.OrderPos),
-                    new SqlParameter("material", item.Material),
+                    new SqlParameter("material", item.MaterialNo),
                     new SqlParameter("status", item.Status),
                     new SqlParameter("nokQuantity", item.NOKQuantity),
                 };
 
                 var sql = new StringBuilder();
 
-                sql.Append($"INSERT INTO OrderItem (OrderNo,OrderPos,Material,Status,NOKQuantity) VALUES (");
+                sql.Append($"INSERT INTO OrderItem (OrderNo,OrderPos,MaterialNo,Status,NOKQuantity) VALUES (");
                 sql.Append($"@orderNo,");
                 sql.Append($"@orderPos,");
-                sql.Append($"@material,");
+                sql.Append($"@materialNo,");
                 sql.Append($"@status,");
                 sql.Append($"@nokQuantity");
                 sql.Append(")");
@@ -326,7 +324,7 @@ namespace ERPSystem.Helpers
             {
                 List<SqlParameter> parameters = new List<SqlParameter>()
                 {
-                    new SqlParameter("material", item.Material),
+                    new SqlParameter("materialNo", item.MaterialNo),
                     new SqlParameter("status", item.Status),
                     new SqlParameter("nokQuantity", item.NOKQuantity),
                     new SqlParameter("orderNo", item.OrderNo),
@@ -336,7 +334,7 @@ namespace ERPSystem.Helpers
                 var sql = new StringBuilder();
 
                 sql.Append($"UPDATE OrderItem ");
-                sql.Append($"SET Material=@material,");
+                sql.Append($"SET MaterialNo=@materialNo,");
                 sql.Append($"Status=@status,");
                 sql.Append($"NOKQuantity=@nokQuantity ");
                 sql.Append($"WHERE OrderNo=@orderNo AND OrderPos=@orderPos");
@@ -478,7 +476,7 @@ namespace ERPSystem.Helpers
 
             item.OrderNo = (string)row["OrderNo"];
             item.OrderPos = (string)row["OrderPos"];
-            item.Material = (string)row["Material"];
+            item.MaterialNo = (string)row["MaterialNo"];
             item.Status = MayConvertDBNull<string>(row["Status"]);
             item.NOKQuantity = MayConvertDBNull(row["NOKQuantity"], 0);
 
