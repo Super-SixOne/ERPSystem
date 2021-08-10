@@ -19,9 +19,11 @@ namespace ERPSystem.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var lastOrders = await SqlHelper.GetLastOrdersAsync(5,CancellationToken.None);
+            
+            return View(lastOrders);
         }
 
 
