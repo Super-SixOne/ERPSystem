@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ERPSystem.Controllers
 {
-    public class CustomerController : Controller
+    public class CustomersController : Controller
     {
         
         public async Task<IActionResult> Index()

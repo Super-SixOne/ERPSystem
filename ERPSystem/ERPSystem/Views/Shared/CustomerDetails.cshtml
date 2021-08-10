@@ -1,6 +1,6 @@
 ﻿@model ERPSystem.Models.Customer
 
-@using (Html.BeginForm("AddUpdateCustomer", "Customer", FormMethod.Post))
+@using (Html.BeginForm("AddUpdateCustomer", "Customers", FormMethod.Post))
 {
     <input type="hidden" name="CustomerNo" value="@Model.CustomerNo"/>
     <div class="form-group row">
