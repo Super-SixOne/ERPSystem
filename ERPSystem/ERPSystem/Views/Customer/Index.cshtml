@@ -1,0 +1,116 @@
+﻿@model ERPSystem.Models.CustomerCollection;
+@{
+    ViewData["Title"] = "Customers";
+}
+
+<div class="d-flex justify-content-between mb-3">
+    <h1>Customers (@Model.Count)</h1>
+    
+    <span data-toggle="tooltip" title="Add new customer">
+        <button class="btn btn-outline-dark" data-toggle="modal" data-target="#modal-edit" onclick="AddEditEmployee()">
+            <i class="fas fa-user-plus"></i>
+        </button>
+    </span>
+</div>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">VIP</th>
+        <th scope="col">Customer No</th>
+        <th scope="col">Customer Name</th>
+        <th scope="col">Country</th>
+        <th scope="col">City</th>
+        <th scope="col">Address</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+         @foreach (var customer in Model)
+            {
+                <tr>
+                    <td>@if (customer.VIP) {<i class="fas fa-gem"></i>}</td>
+                    <td>@customer.CustomerNo</td>
+                    <td>@customer.CustomerName</td>
+                    <td>@customer.Country</td>
+                    <td>@customer.City</td>
+                    <td>@customer.Streetaddress</td>
+                    <td>
+                        <div class="float-right">
+                            <span data-toggle="tooltip" title="Edit current customer">
+                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#modal-edit"
+                                        onclick="AddEditEmployee(@customer.CustomerNo)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </span>
+                            <span data-toggle="tooltip" title="Delete current customer">
+                                <button class="btn btn-outline-danger deleteItem" data-toggle="modal" data-target="#modal-delete"
+                                        data-id="@customer.CustomerNo"
+                                        data-path="@Url.Action("DeleteCustomer", "Customer", new {customerNo = customer.CustomerNo})">
+                                    <i class="fas fa-user-slash"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            }
+    </tbody>
+</table>
+
+<div class="modal fade" id="modal-delete" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Customer Delete Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Are you sure you want to delete current customer?</h4>
+                <p class="alert alert-warning">You will not be able to revert changes.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" id="btnContinueDelete">Delete</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal-edit" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Customer dialog</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body" id="modalEditBody">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        let path_to_delete;
+    
+        $(".deleteItem").click(function(e) {
+            path_to_delete = $(this).data('path');
+        });
+    
+        $('#btnContinueDelete').click(function () {
+            window.location = path_to_delete;
+        });
+        
+        let AddEditEmployee=function(employeeId){
+            
+            let url="/Customer/AddEditCustomer?CustomerNo="+employeeId;
+    
+            $("#modalEditBody").load(url,function(){
+                $("#modal-edit").modal("show");
+            })
+    
+        }
+    </script>
+}
