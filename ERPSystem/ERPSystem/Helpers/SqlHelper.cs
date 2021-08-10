@@ -193,6 +193,18 @@ namespace ERPSystem.Helpers
             return orders;
         }
 
+        public static async Task<OrderHeader> GetOrderAsync(string orderNo, CancellationToken cancellationToken)
+        {
+            var table = await GetDataAsync($"SELECT * FROM OrderHeader WHERE OrderNo='{orderNo}'", cancellationToken);
+
+            foreach (DataRow row in table.Rows)
+            {
+                return MapToOrder(row);
+            }
+
+            return null;
+        }
+
         public static async Task<int> AddOrderItemAsync(OrderItem item, CancellationToken cancellationToken)
         {
             if (item != null)
