@@ -1,6 +1,7 @@
 ﻿using ERPSystem.Models;
 using Microsoft.Data.SqlClient;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Threading;
@@ -34,18 +35,29 @@ namespace ERPSystem.Helpers
         {
             if (customer != null)
             {
+                List<SqlParameter> parameters = new List<SqlParameter>()
+                {
+                    new SqlParameter("customerNo", customer.CustomerNo),
+                    new SqlParameter("customerName", customer.CustomerName),
+                    new SqlParameter("streetaddress", customer.Streetaddress),
+                    new SqlParameter("city", customer.City),
+                    new SqlParameter("country", customer.Country),
+                    new SqlParameter("vip", customer.VIP ? "1" : "0")
+
+                };
+
                 var sql = new StringBuilder();
 
                 sql.Append($"INSERT INTO Customer (CustomerNo,CustomerName,Streetaddress,City,Country,VIP) VALUES (");
-                sql.Append($"'{customer.CustomerNo}',");
-                sql.Append($"'{customer.CustomerName}',");
-                sql.Append($"'{customer.Streetaddress}',");
-                sql.Append($"'{customer.City}',");
-                sql.Append($"'{customer.Country}',");
-                sql.Append($"{(customer.VIP ? "1" : "0")}");
+                sql.Append($"@customerNo,");
+                sql.Append($"@customerName,");
+                sql.Append($"@streetaddress,");
+                sql.Append($"@city,");
+                sql.Append($"@country,");
+                sql.Append($"@vip");
                 sql.Append(")");
 
-                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
+                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken , parameters);
             }
 
             return 0;
@@ -55,17 +67,27 @@ namespace ERPSystem.Helpers
         {
             if (customer != null)
             {
+                List<SqlParameter> parameters = new List<SqlParameter>()
+                {
+                    new SqlParameter("customerName", customer.CustomerName),
+                    new SqlParameter("streetaddress", customer.Streetaddress),
+                    new SqlParameter("city", customer.City),
+                    new SqlParameter("country", customer.Country),
+                    new SqlParameter("vip", customer.VIP ? "1" : "0"),
+                    new SqlParameter("customerNo", customer.CustomerNo)
+                };
+
                 var sql = new StringBuilder();
 
                 sql.Append($"UPDATE Customer ");
-                sql.Append($"SET CustomerName='{customer.CustomerName}',");
-                sql.Append($"Streetaddress='{customer.Streetaddress}',");
-                sql.Append($"City='{customer.City}',");
-                sql.Append($"Country='{customer.Country}',");
-                sql.Append($"VIP={(customer.VIP ? "1" : "0")} ");
-                sql.Append($"WHERE CustomerNo = '{customer.CustomerNo}'");
+                sql.Append($"SET CustomerName=@customerName,");
+                sql.Append($"Streetaddress=@streetaddress,");
+                sql.Append($"City=@city,");
+                sql.Append($"Country=@country,");
+                sql.Append($"VIP=@vip ");
+                sql.Append($"WHERE CustomerNo = @customerNo");
 
-                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
+                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken, parameters);
             }
 
             return 0;
@@ -73,7 +95,12 @@ namespace ERPSystem.Helpers
 
         public static async Task<int> DeleteCustomerAsync(string customerNo, CancellationToken cancellationToken)
         {
-            return await ExecuteNonQueryAsync($"DELETE FROM Customer WHERE CustomerNo='{customerNo}'", cancellationToken);
+            List<SqlParameter> parameters = new List<SqlParameter>()
+            {
+                new SqlParameter("customerNo", customerNo)
+            };
+
+            return await ExecuteNonQueryAsync($"DELETE FROM Customer WHERE CustomerNo=@customerNo", cancellationToken, parameters);
         }
 
         public static async Task<CustomerCollection> GetCustomersAsync(CancellationToken cancellationToken)
@@ -92,7 +119,13 @@ namespace ERPSystem.Helpers
 
         public static async Task<Customer> GetCustomerAsync(string customerNo, CancellationToken cancellationToken)
         {
-            var table = await GetDataAsync($"SELECT * FROM Customer WHERE CustomerNo='{customerNo}'", cancellationToken);
+            List<SqlParameter> parameters = new List<SqlParameter>()
+            {
+                new SqlParameter("customerNo", customerNo)
+
+            };
+
+            var table = await GetDataAsync($"SELECT * FROM Customer WHERE CustomerNo=@customerNo", cancellationToken, parameters);
 
             foreach (DataRow row in table.Rows)
             {
@@ -110,18 +143,29 @@ namespace ERPSystem.Helpers
         {
             if (order != null)
             {
+                List<SqlParameter> parameters = new List<SqlParameter>()
+                {
+                    new SqlParameter("orderNo", order.OrderNo),
+                    new SqlParameter("customerNo", order.CustomerNo),
+                    new SqlParameter("creationDate", order.CreationDate),
+                    new SqlParameter("status", order.Status),
+                    new SqlParameter("carrier", order.Carrier),
+                    new SqlParameter("sequence", order.Sequence)
+
+                };
+
                 var sql = new StringBuilder();
 
                 sql.Append($"INSERT INTO OrderHeader (OrderNo,CustomerNo,CreationDate,Status,Carrier,Sequence) VALUES (");
-                sql.Append($"'{order.OrderNo}',");
-                sql.Append($"'{order.CustomerNo}',");
-                sql.Append($"'{order.CreationDate}',");
-                sql.Append($"'{order.Status}',");
-                sql.Append($"'{order.Carrier}',");
-                sql.Append($"{order.Sequence}");
+                sql.Append($"@orderNo,");
+                sql.Append($"@customerNo,");
+                sql.Append($"@creationDate,");
+                sql.Append($"@status,");
+                sql.Append($"@carrier,");
+                sql.Append($"@sequence");
                 sql.Append(")");
 
-                var updates = await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
+                var updates = await ExecuteNonQueryAsync(sql.ToString(), cancellationToken, parameters);
 
                 if (order.Items != null)
                 {
@@ -141,16 +185,25 @@ namespace ERPSystem.Helpers
         {
             if (order != null)
             {
+                List<SqlParameter> parameters = new List<SqlParameter>()
+                {
+                    new SqlParameter("customerNo", order.CustomerNo),
+                    new SqlParameter("status", order.Status),
+                    new SqlParameter("carrier", order.Carrier),
+                    new SqlParameter("sequence", order.Sequence),
+                    new SqlParameter("orderNo", order.OrderNo)
+                };
+
                 var sql = new StringBuilder();
 
                 sql.Append($"UPDATE OrderHeader ");
-                sql.Append($"SET CustomerNo='{order.CustomerNo}',");
-                sql.Append($"Status='{order.Status}',");
-                sql.Append($"Carrier='{order.Carrier}',");
-                sql.Append($"Sequence={order.Sequence} ");
-                sql.Append($"WHERE OrderNo='{order.OrderNo}'");
+                sql.Append($"SET CustomerNo=@customerNo,");
+                sql.Append($"Status=@status,");
+                sql.Append($"Carrier=@carrier,");
+                sql.Append($"Sequence=@sequence ");
+                sql.Append($"WHERE OrderNo=@orderNo");
 
-                var updates = await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
+                var updates = await ExecuteNonQueryAsync(sql.ToString(), cancellationToken, parameters);
 
                 if (order.Items != null)
                 {
@@ -167,8 +220,13 @@ namespace ERPSystem.Helpers
         }
         public static async Task<int> DeleteOrderAsync(string orderNo, CancellationToken cancellationToken)
         {
-            await ExecuteNonQueryAsync($"DELETE FROM OrderItem WHERE OrderNo='{orderNo}'", cancellationToken);
-            return await ExecuteNonQueryAsync($"DELETE FROM OrderHeader WHERE OrderNo='{orderNo}'", cancellationToken);
+            List<SqlParameter> parameters = new List<SqlParameter>()
+            {
+                new SqlParameter("orderNo", orderNo)
+            };
+
+            await ExecuteNonQueryAsync($"DELETE FROM OrderItem WHERE OrderNo=@orderNo", cancellationToken, parameters);
+            return await ExecuteNonQueryAsync($"DELETE FROM OrderHeader WHERE OrderNo=@orderNo", cancellationToken, parameters);
         }
 
         public static Task<OrderHeaderCollection> GetOrdersAsync(CancellationToken cancellationToken)
@@ -178,10 +236,15 @@ namespace ERPSystem.Helpers
 
         public static async Task<OrderHeaderCollection> GetOrdersAsync(string customerNo, CancellationToken cancellationToken)
         {
+            List<SqlParameter> parameters = new List<SqlParameter>()
+            {
+                new SqlParameter("customerNo", customerNo)
+            };
+
             var orders = new OrderHeaderCollection();
 
-            var where = customerNo != null ? $" WHERE CustomerNo='{customerNo}'" : string.Empty;
-            var table = await GetDataAsync($"SELECT * FROM OrderHeader{where}", cancellationToken);
+            var where = customerNo != null ? $" WHERE CustomerNo=@customerNo" : string.Empty;
+            var table = await GetDataAsync($"SELECT * FROM OrderHeader{where}", cancellationToken, parameters);
 
             foreach (DataRow row in table.Rows)
             {
@@ -197,19 +260,30 @@ namespace ERPSystem.Helpers
         {
             if (item != null)
             {
+                List<SqlParameter> parameters = new List<SqlParameter>()
+                {
+                    new SqlParameter("orderNo", item.OrderNo),
+                    new SqlParameter("orderPos", item.OrderPos),
+                    new SqlParameter("material", item.Material),
+                    new SqlParameter("status", item.Status),
+                    new SqlParameter("targetQuantity", item.TargetQuantity),
+                    new SqlParameter("currentQuantity", item.CurrentQuantity),
+                    new SqlParameter("nokQuantity", item.NOKQuantity),
+                };
+
                 var sql = new StringBuilder();
 
                 sql.Append($"INSERT INTO OrderItem (OrderNo,OrderPos,Material,Status,TargetQuantity,CurrentQuantity,NOKQuantity) VALUES (");
-                sql.Append($"'{item.OrderNo}',");
-                sql.Append($"'{item.OrderPos}',");
-                sql.Append($"'{item.Material}',");
-                sql.Append($"'{item.Status}',");
-                sql.Append($"{item.TargetQuantity},");
-                sql.Append($"{item.CurrentQuantity},");
-                sql.Append($"{item.NOKQuantity}");
+                sql.Append($"@orderNo,");
+                sql.Append($"@orderPos,");
+                sql.Append($"@material,");
+                sql.Append($"@status,");
+                sql.Append($"@targetQuantity,");
+                sql.Append($"@currentQuantity,");
+                sql.Append($"@nokQuantity");
                 sql.Append(")");
 
-                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
+                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken, parameters);
             }
 
             return 0;
@@ -219,17 +293,28 @@ namespace ERPSystem.Helpers
         {
             if (item != null)
             {
+                List<SqlParameter> parameters = new List<SqlParameter>()
+                {
+                    new SqlParameter("material", item.Material),
+                    new SqlParameter("status", item.Status),
+                    new SqlParameter("targetQuantity", item.TargetQuantity),
+                    new SqlParameter("currentQuantity", item.CurrentQuantity),
+                    new SqlParameter("nokQuantity", item.NOKQuantity),
+                    new SqlParameter("orderNo", item.OrderNo),
+                    new SqlParameter("orderPos", item.OrderPos)
+                };
+
                 var sql = new StringBuilder();
 
                 sql.Append($"UPDATE OrderItem ");
-                sql.Append($"SET Material='{item.Material}',");
-                sql.Append($"Status='{item.Status}',");
-                sql.Append($"TargetQuantity={item.TargetQuantity},");
-                sql.Append($"CurrentQuantity={item.CurrentQuantity},");
-                sql.Append($"NOKQuantity={item.NOKQuantity} ");
-                sql.Append($"WHERE OrderNo='{item.OrderNo}' AND OrderPos='{item.OrderPos}'");
+                sql.Append($"SET Material=@material,");
+                sql.Append($"Status=@status,");
+                sql.Append($"TargetQuantity=@targetQuantity,");
+                sql.Append($"CurrentQuantity=@currentQuantity,");
+                sql.Append($"NOKQuantity=@nokQuantity ");
+                sql.Append($"WHERE OrderNo=@orderNo AND OrderPos=@orderPos");
 
-                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken);
+                return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken, parameters);
             }
 
             return 0;
@@ -237,14 +322,25 @@ namespace ERPSystem.Helpers
 
         public static async Task<int> DeleteOrderItemAsync(string orderNo, string orderPos, CancellationToken cancellationToken)
         {
-            return await ExecuteNonQueryAsync($"DELETE FROM OrderItem WHERE OrderNo='{orderNo}' AND OrderPos='{orderPos}'", cancellationToken);
+            List<SqlParameter> parameters = new List<SqlParameter>()
+            {
+                new SqlParameter("orderNo", orderNo),
+                new SqlParameter("orderPos", orderPos)
+            };
+
+            return await ExecuteNonQueryAsync($"DELETE FROM OrderItem WHERE OrderNo=@orderNo AND OrderPos=@orderPos", cancellationToken, parameters);
         }
 
         public static async Task<OrderItemCollection> GetOrderItemsAsync(string orderNo, CancellationToken cancellationToken)
         {
+            List<SqlParameter> parameters = new List<SqlParameter>()
+            {
+                new SqlParameter("orderNo", orderNo),
+            };
+
             var items = new OrderItemCollection();
 
-            var table = await GetDataAsync($"SELECT * FROM OrderItem WHERE OrderNo='{orderNo}'", cancellationToken);
+            var table = await GetDataAsync($"SELECT * FROM OrderItem WHERE OrderNo=@orderNo", cancellationToken, parameters);
 
             foreach (DataRow row in table.Rows)
             {
@@ -258,13 +354,22 @@ namespace ERPSystem.Helpers
 
         #region Helper Methods
 
-        public static async Task<DataTable> GetDataAsync(string statement, CancellationToken cancellationToken)
+        public static async Task<DataTable> GetDataAsync(string statement, CancellationToken cancellationToken, List<SqlParameter> parameters = null)
         {
             var table = new DataTable();
 
             using (var connection = new SqlConnection(ConnectionString))
             {
                 using var adapter = new SqlDataAdapter(statement, connection);
+
+                if(parameters != null)
+                {
+                    foreach (SqlParameter parameter in parameters)
+                    {
+                        adapter.SelectCommand.Parameters.Add(parameter);
+                    }
+                }
+
                 await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
                 adapter.Fill(table);
             }
@@ -273,12 +378,20 @@ namespace ERPSystem.Helpers
         }
 
 
-        public static async Task<int> ExecuteNonQueryAsync(string statement, CancellationToken cancellationToken)
+        public static async Task<int> ExecuteNonQueryAsync(string statement, CancellationToken cancellationToken, List<SqlParameter> parameters = null)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 using (var command = new SqlCommand(statement, connection))
                 {
+                    if(parameters != null)
+                    {
+                        foreach (SqlParameter parameter in parameters)
+                        {
+                            command.Parameters.Add(parameter);
+                        }
+                    }
+
                     await connection.OpenAsync();
                     return await command.ExecuteNonQueryAsync(cancellationToken);
                 }
