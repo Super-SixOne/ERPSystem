@@ -54,6 +54,8 @@ namespace ERPSystem.Controllers
 
             var model = existingOrders.FirstOrDefault(c => c.OrderNo == orderNo) ?? new OrderHeader();
 
+            ViewData["ExistingCustomers"] = await GetAllCustomers();
+            
             return View("OrderEditingView", model);
         }
         
@@ -71,6 +73,12 @@ namespace ERPSystem.Controllers
         {
             var order = await SqlHelper.GetOrderAsync(orderNo, CancellationToken.None);
             return View("OrderDetailedView", order);
+        }
+
+        public async Task<CustomerCollection> GetAllCustomers()
+        {
+            var existingCustomers = await SqlHelper.GetCustomersAsync(CancellationToken.None);
+            return existingCustomers;
         }
     }
 }
