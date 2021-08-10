@@ -80,5 +80,17 @@ namespace ERPSystem.Controllers
             var existingCustomers = await SqlHelper.GetCustomersAsync(CancellationToken.None);
             return existingCustomers;
         }
+
+        public void AddUpdateItem(OrderItem orderItem)
+        {
+            
+        }
+        
+        public PartialViewResult AddEditItem(OrderItem orderItem)
+        {
+            var item = orderItem ?? new OrderItem();
+           // item.OrderNo = orderHeader.OrderNo;
+            return PartialView("OrderItemDetails", item);
+        }
     }
 }
