@@ -298,7 +298,6 @@ namespace ERPSystem.Helpers
                     new SqlParameter("orderNo", item.OrderNo),
                     new SqlParameter("orderPos", item.OrderPos),
                     new SqlParameter("material", item.MaterialNo),
-                    new SqlParameter("status", item.Status),
                     new SqlParameter("nokQuantity", item.NOKQuantity),
                 };
 
@@ -308,7 +307,6 @@ namespace ERPSystem.Helpers
                 sql.Append($"@orderNo,");
                 sql.Append($"@orderPos,");
                 sql.Append($"@materialNo,");
-                sql.Append($"@status,");
                 sql.Append($"@nokQuantity");
                 sql.Append(")");
 
@@ -325,7 +323,6 @@ namespace ERPSystem.Helpers
                 List<SqlParameter> parameters = new List<SqlParameter>()
                 {
                     new SqlParameter("materialNo", item.MaterialNo),
-                    new SqlParameter("status", item.Status),
                     new SqlParameter("nokQuantity", item.NOKQuantity),
                     new SqlParameter("orderNo", item.OrderNo),
                     new SqlParameter("orderPos", item.OrderPos)
@@ -335,7 +332,6 @@ namespace ERPSystem.Helpers
 
                 sql.Append($"UPDATE OrderItem ");
                 sql.Append($"SET MaterialNo=@materialNo,");
-                sql.Append($"Status=@status,");
                 sql.Append($"NOKQuantity=@nokQuantity ");
                 sql.Append($"WHERE OrderNo=@orderNo AND OrderPos=@orderPos");
 
@@ -477,7 +473,6 @@ namespace ERPSystem.Helpers
             item.OrderNo = (string)row["OrderNo"];
             item.OrderPos = (string)row["OrderPos"];
             item.MaterialNo = (string)row["MaterialNo"];
-            item.Status = MayConvertDBNull<string>(row["Status"]);
             item.NOKQuantity = MayConvertDBNull(row["NOKQuantity"], 0);
 
             return item;
