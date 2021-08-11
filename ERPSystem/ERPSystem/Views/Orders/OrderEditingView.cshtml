@@ -45,7 +45,10 @@
                 <input type="text" class="form-control" id="Carrier" name="Carrier" required value="@Model.Carrier">
             </div>
             <div class="text-right">
-                <button type="submit" class="btn btn-outline-primary">Submit</button>
+                <button type="submit" id="submitBtn" class="btn btn-outline-primary"
+                        @{ if(Model.Items.Count <= 0) { 
+                                     @:disabled="disabled" 
+                                } }>Submit</button>
             </div>
         </div>
         <div class="col-8">
@@ -87,6 +90,9 @@
                 cache: false,
                 success: function(html) { 
                     $("#itemsTable > tbody").append(html); 
+                    if ($("#itemsTable > tbody > tr").length > 0){
+                        $("#submitBtn").prop('disabled', false);
+                    }
                 }
             });
             return false;
@@ -94,6 +100,9 @@
         
          $("body").on("click", ".deleteRow", function (){
             $(this).parents("tr.editorRow:first").remove();
+            if ($("#itemsTable > tbody > tr").length <= 0){
+                $("#submitBtn").prop('disabled', true);
+            }
             return false;
          });
     </script>
