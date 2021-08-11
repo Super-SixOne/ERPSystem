@@ -80,7 +80,6 @@ namespace ERPSystem.Controllers
         }
         
 
-        [HttpPost]
         public async Task<IActionResult> DeleteOrder(string orderNo)
         {
             await SqlHelper.DeleteOrderAsync(orderNo, CancellationToken.None);
