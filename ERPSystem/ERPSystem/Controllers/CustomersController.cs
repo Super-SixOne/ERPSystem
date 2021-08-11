@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ERPSystem.Helpers;
@@ -27,9 +28,17 @@ namespace ERPSystem.Controllers
 
                 while(nextCustomerNumber < 10000000)
                 {
-                    if(!existingCustomers.Any(c => c.CustomerNo == nextCustomerNumber.ToString()))
+                    if(!existingCustomers.Any(c => Convert.ToInt32(c.CustomerNo) == nextCustomerNumber))
                     {
-                        customer.CustomerNo = nextCustomerNumber.ToString();
+                        string newCustomerNumber = nextCustomerNumber.ToString();
+                        int length = newCustomerNumber.Length;
+
+                        for (int i = 8; i > length; i--)
+                        {
+                            newCustomerNumber = newCustomerNumber.Insert(0, "0");
+                        }
+
+                        customer.CustomerNo = newCustomerNumber.ToString();
                         break;
                     }
 

@@ -33,8 +33,16 @@ namespace ERPSystem.Controllers
 
                 while (nextOrderNumber < 10000000)
                 {
-                    if (!existingOrders.Any(o => o.OrderNo == nextOrderNumber.ToString()))
+                    if (!existingOrders.Any(o => Convert.ToInt32(o.OrderNo) == nextOrderNumber))
                     {
+                        string newOrderNumber = nextOrderNumber.ToString();
+                        int length = newOrderNumber.Length;
+
+                        for (int i = 8; i > length; i--)
+                        {
+                            newOrderNumber = newOrderNumber.Insert(0, "0");
+                        }
+
                         order.OrderNo = nextOrderNumber.ToString();
                         break;
                     }
