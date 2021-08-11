@@ -133,7 +133,7 @@ namespace ERPSystem.Helpers
 
             return null;
         }
-        
+
         public static async Task<MaterialCollection> GetMaterialsAsync(CancellationToken cancellationToken)
         {
             var materials = new MaterialCollection();
@@ -198,7 +198,11 @@ namespace ERPSystem.Helpers
 
                 var updates = await ExecuteNonQueryAsync(sql.ToString(), cancellationToken, parameters);
 
-                if (order.Items == null) return updates;
+                if (order.Items == null)
+                {
+                    return updates;
+                }
+
                 foreach (var item in order.Items)
                 {
                     await AddOrderItemAsync(item, cancellationToken);
@@ -296,7 +300,7 @@ namespace ERPSystem.Helpers
 
             foreach (DataRow row in table.Rows)
             {
-                return MapToOrder(row);
+                return await MapToOrderAsync(row, true, cancellationToken);
             }
 
             return null;
