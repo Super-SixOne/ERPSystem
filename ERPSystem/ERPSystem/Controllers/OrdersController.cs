@@ -35,15 +35,7 @@ namespace ERPSystem.Controllers
                 {
                     if (!existingOrders.Any(o => Convert.ToInt32(o.OrderNo) == nextOrderNumber))
                     {
-                        string newOrderNumber = nextOrderNumber.ToString();
-                        int length = newOrderNumber.Length;
-
-                        for (int i = 8; i > length; i--)
-                        {
-                            newOrderNumber = newOrderNumber.Insert(0, "0");
-                        }
-
-                        order.OrderNo = nextOrderNumber.ToString();
+                        order.OrderNo = nextOrderNumber.ToString("D" + 8);
                         break;
                     }
 

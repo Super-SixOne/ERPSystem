@@ -30,15 +30,7 @@ namespace ERPSystem.Controllers
                 {
                     if(!existingCustomers.Any(c => Convert.ToInt32(c.CustomerNo) == nextCustomerNumber))
                     {
-                        string newCustomerNumber = nextCustomerNumber.ToString();
-                        int length = newCustomerNumber.Length;
-
-                        for (int i = 8; i > length; i--)
-                        {
-                            newCustomerNumber = newCustomerNumber.Insert(0, "0");
-                        }
-
-                        customer.CustomerNo = newCustomerNumber.ToString();
+                        customer.CustomerNo = nextCustomerNumber.ToString("D" + 8);
                         break;
                     }
 
