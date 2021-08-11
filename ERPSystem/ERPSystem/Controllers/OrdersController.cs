@@ -89,6 +89,9 @@ namespace ERPSystem.Controllers
         public async Task<IActionResult> ViewOrder(string orderNo)
         {
             var order = await SqlHelper.GetOrderAsync(orderNo, CancellationToken.None);
+            
+            ViewData["ExistingMaterials"] = await GetAllMaterials();
+            
             return View("OrderDetailedView", order);
         }
 
