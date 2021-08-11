@@ -258,11 +258,14 @@ namespace ERPSystem.Helpers
                 new SqlParameter("orderNo", orderNo)
             };
 
-            var updates = await ExecuteNonQueryAsync($"DELETE FROM OrderItem WHERE OrderNo=@orderNo", cancellationToken, parameters);
+            await ExecuteNonQueryAsync($"DELETE FROM OrderItem WHERE OrderNo=@orderNo", cancellationToken, parameters);
 
-            await ExecuteNonQueryAsync($"DELETE FROM OrderHeader WHERE OrderNo=@orderNo", cancellationToken, parameters);
+            parameters = new List<SqlParameter>()
+            {
+                new SqlParameter("orderNo", orderNo)
+            };
 
-            return updates;
+            return await ExecuteNonQueryAsync($"DELETE FROM OrderHeader WHERE OrderNo=@orderNo", cancellationToken, parameters);
         }
 
         public static Task<OrderHeaderCollection> GetOrdersAsync(CancellationToken cancellationToken)
