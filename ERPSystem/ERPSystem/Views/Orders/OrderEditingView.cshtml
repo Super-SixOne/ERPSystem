@@ -1,7 +1,8 @@
 ﻿@model ERPSystem.Models.OrderHeader
 @{
     ViewData["Title"] = Model.OrderNo != null ? "Details for Order No: " + Model.OrderNo : "New Order";
-    var ExistingCustomers = ViewData["ExistingCustomers"] as CustomerCollection;
+    var existingCustomers = ViewData["ExistingCustomers"] as CustomerCollection;
+    var existingMaterials = ViewData["ExistingMaterials"] as MaterialCollection;
 }
 <nav aria-label="breadcrumb mb-4">
     <ol class="breadcrumb">
@@ -27,27 +28,27 @@
             <div class="form-group">
                 <label for="CreationDate">Order Date</label>
                 <input type="datetime-local" class="form-control" id="CreationDate" name="CreationDate" required value="@Model.CreationDate">
-            </div>       
-            @if (ExistingCustomers != null)
+            </div>
+            @if (existingCustomers != null)
             {
-            <div class="form-group">
-                <label>Customer</label>
-                <select class="form-control" id="CustomerNo" name="CustomerNo" required asp-for="CustomerNo">
-                    @foreach (var customer in ExistingCustomers)
-                    {
-                        <option value="@customer.CustomerNo">@customer.CustomerName</option>
-                    }
-                </select>
-            </div>   
-            }                                             
+                <div class="form-group">
+                    <label>Customer</label>
+                    <select class="form-control" id="CustomerNo" name="CustomerNo" required asp-for="CustomerNo">
+                        @foreach (var customer in existingCustomers)
+                        {
+                            <option value="@customer.CustomerNo">@customer.CustomerName</option>
+                        }
+                    </select>
+                </div>
+            }
             <div class="form-group">
                 <label for="Sequence">Order Priority</label>
                 <input type="number" class="form-control" id="Sequence" name="Sequence" required value="@Model.Sequence">
-            </div>                                                           
+            </div>
             <div class="form-group">
                 <label for="Carrier">Carrier</label>
                 <input type="text" class="form-control" id="Carrier" name="Carrier" required value="@Model.Carrier">
-            </div>  
+            </div>
             <div class="text-right">
                 <button type="submit" class="btn btn-outline-primary">Submit</button>
             </div>
@@ -57,78 +58,49 @@
                 <h2>Items</h2>
                 
                 <span class="align-self-center" data-toggle="tooltip" title="Add new item">
-                    <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#modal-edit" onclick="AddEditItem()">
+                    <a class="btn btn-outline-dark"
+                       id="addItem"
+                       href="@Url.Action("BlankEditorRow", null)">
                         <i class="fas fa-plus-circle"></i>
-                    </button>
+                    </a>
                 </span>
             </div>
 
             <table class="table table-striped" id="itemsTable">
                 <thead>
+                    <th>OrderPos</th>
                     <th>Material</th>
-                    <th>Position</th>
-                    <th>Status</th>
                     <th>NOKQuantity</th>
+                    <th style="width: 66px"></th>
                 </thead>
                 <tbody>
-                
+                    @foreach (var item in Model.Items)
+                    {
+                        await Html.RenderPartialAsync("OrderItemEditorRow", item);
+                    }
                 </tbody>
             </table>
         </div>
     </div>
 }
 
-<div class="modal fade" id="modal-delete" tabindex="-1" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Order Item Delete Confirmation</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-                <h4>Are you sure you want to delete current order item?</h4>
-                <p class="alert alert-warning">You will not be able to revert changes.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-danger" id="btnContinueDelete">Delete</button>
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modal-edit" tabindex="-1" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Order Item dialog</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body" id="modalEditBody">
-            </div>
-        </div>
-    </div>
-</div>
-
 @section Scripts
 {
     <script>
-        let path_to_delete;
-    
-        $(".deleteItem").click(function(e) {
-            path_to_delete = $(this).data('path');
-        });
-    
-        $('#btnContinueDelete').click(function () {
-            window.location = path_to_delete;
+        $("#addItem").click(function() {
+            $.ajax({
+                url: this.href,
+                cache: false,
+                success: function(html) { 
+                    $("#itemsTable > tbody").append(html); 
+                }
+            });
+            return false;
         });
         
-        let AddEditItem=function(orderItem){
-    
-            $("#modalEditBody").load("/Order/AddEditItem",{"orderItem" : orderItem},function(){
-                $("#modal-edit").modal("show");
-            })
-    
-        }
+         $("body").on("click", ".deleteRow", function (){
+            $(this).parents("tr.editorRow:first").remove();
+            return false;
+         });
     </script>
 }

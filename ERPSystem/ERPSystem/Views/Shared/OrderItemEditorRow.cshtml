@@ -1,0 +1,34 @@
+﻿@model ERPSystem.Models.OrderItem
+@using HtmlHelpers.BeginCollectionItemCore;
+@{
+    var existingMaterials = ViewData["ExistingMaterials"] as MaterialCollection;
+}
+<tr class="editorRow">
+    @using (Html.BeginCollectionItem("Items"))
+    {
+        <td>
+            @Html.TextBoxFor(x => x.OrderPos, new {@class = "form-control"})
+        </td>
+        <td>
+            <select class="form-control" id="MaterialNo" name="MaterialNo" required asp-for="MaterialNo">
+                @if (existingMaterials != null)
+                {
+                    foreach (var material in existingMaterials)
+                    {
+                        <option value="@material.MaterialNo">@material.MaterialNo (@material.MaterialType)</option>
+                    }
+                }
+            </select>
+        </td>
+        <td>
+            @Html.TextBoxFor(x => x.NOKQuantity, new {@class="form-control", type="number"})
+        </td>
+        <td>
+             <span data-toggle="tooltip" title="Delete current item">
+                <button class="btn btn-outline-danger deleteRow">
+                    <i class="fas fa-ban"></i>
+                </button>
+            </span>
+        </td>
+    }    
+</tr>

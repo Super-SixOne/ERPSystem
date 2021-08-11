@@ -133,6 +133,21 @@ namespace ERPSystem.Helpers
 
             return null;
         }
+        
+        public static async Task<MaterialCollection> GetMaterialsAsync(CancellationToken cancellationToken)
+        {
+            var materials = new MaterialCollection();
+
+            var table = await GetDataAsync("SELECT * FROM Material", cancellationToken);
+
+            foreach (DataRow row in table.Rows)
+            {
+                materials.Add(MapToMaterial(row));
+            }
+
+            return materials;
+        }
+
 
         public static async Task<Material> GetMaterialAsync(string materialNo, CancellationToken cancellationToken)
         {

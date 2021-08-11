@@ -3,9 +3,11 @@ using ERPSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace ERPSystem.Controllers
 {
@@ -38,11 +40,22 @@ namespace ERPSystem.Controllers
 
                     nextOrderNumber++;
                 }
+                
+                foreach (var orderItem in order.Items)
+                {
+                    orderItem.OrderNo = order.OrderNo;
+                }
 
                 await SqlHelper.AddOrderAsync(order, CancellationToken.None);
             }
             else
             {
+                // Note: I know that it is duplication. But I have to idea for now how to improve it, sorry
+                foreach (var orderItem in order.Items)
+                {
+                    orderItem.OrderNo = order.OrderNo;
+                }
+                
                 await SqlHelper.UpdateOrderAsync(order, CancellationToken.None);
             }
             return RedirectToAction("Index");
@@ -51,10 +64,11 @@ namespace ERPSystem.Controllers
         public async Task<IActionResult> AddEditOrder(string orderNo)
         {
             var existingOrders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
-
             var model = existingOrders.FirstOrDefault(c => c.OrderNo == orderNo) ?? new OrderHeader();
 
             ViewData["ExistingCustomers"] = await GetAllCustomers();
+
+            ViewData["ExistingMaterials"] = await GetAllMaterials();
             
             return View("OrderEditingView", model);
         }
@@ -80,17 +94,16 @@ namespace ERPSystem.Controllers
             var existingCustomers = await SqlHelper.GetCustomersAsync(CancellationToken.None);
             return existingCustomers;
         }
-
-        public void AddUpdateItem(OrderItem orderItem)
+        public async Task<MaterialCollection> GetAllMaterials()
         {
-            
+            var existingMaterials = await SqlHelper.GetMaterialsAsync(CancellationToken.None);
+            return existingMaterials;
         }
         
-        public PartialViewResult AddEditItem(OrderItem orderItem)
+        public async Task<PartialViewResult> BlankEditorRow()
         {
-            var item = orderItem ?? new OrderItem();
-           // item.OrderNo = orderHeader.OrderNo;
-            return PartialView("OrderItemDetails", item);
+            ViewData["ExistingMaterials"] = await GetAllMaterials();
+            return PartialView("OrderItemEditorRow", new OrderItem());
         }
     }
 }

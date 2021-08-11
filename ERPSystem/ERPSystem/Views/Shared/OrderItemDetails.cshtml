@@ -1,7 +1,6 @@
 ﻿@model ERPSystem.Models.OrderItem
 
-@using (Html.BeginForm("AddUpdateItem", "Orders", FormMethod.Post))
-{
+<form>
     <input type="hidden" name="OrderNo" value="@Model.OrderNo"/>
     <div class="form-group row">
         <label for="OrderPos" class="col-sm-3 col-form-label">OrderPos</label>
@@ -16,19 +15,13 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="Status" class="col-sm-3 col-form-label">Status</label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" id="Status" name="Status" required value="@Model.Status">
-        </div>
-    </div>
-    <div class="form-group row">
         <label for="NOKQuantity" class="col-sm-3 col-form-label">NOKQuantity</label>
         <div class="col-sm-9">
             <input type="number" class="form-control" id="NOKQuantity" name="NOKQuantity" required value="@Model.NOKQuantity">
         </div>
     </div>
     <div class="modal-footer" style="margin-left: -1rem; margin-right: -1rem;">
-        <button type="submit" class="btn btn-outline-primary">Submit</button>
+        <button type="submit" class="btn btn-outline-primary" id="submitButton">Submit</button>
         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
     </div>
-}
+</form>
