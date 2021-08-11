@@ -314,15 +314,17 @@ namespace ERPSystem.Helpers
                     new SqlParameter("orderPos", item.OrderPos),
                     new SqlParameter("material", item.MaterialNo),
                     new SqlParameter("nokQuantity", item.NOKQuantity),
+                    new SqlParameter("targetQuantity", item.TargetQuantity),
                 };
 
                 var sql = new StringBuilder();
 
-                sql.Append($"INSERT INTO OrderItem (OrderNo,OrderPos,MaterialNo,Status,NOKQuantity) VALUES (");
+                sql.Append($"INSERT INTO OrderItem (OrderNo,OrderPos,MaterialNo,Status,NOKQuantity,TargetQuantity) VALUES (");
                 sql.Append($"@orderNo,");
                 sql.Append($"@orderPos,");
                 sql.Append($"@materialNo,");
                 sql.Append($"@nokQuantity");
+                sql.Append($"@targetQuantity");
                 sql.Append(")");
 
                 return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken, parameters);
@@ -339,6 +341,7 @@ namespace ERPSystem.Helpers
                 {
                     new SqlParameter("materialNo", item.MaterialNo),
                     new SqlParameter("nokQuantity", item.NOKQuantity),
+                    new SqlParameter("targetQuantity", item.TargetQuantity),
                     new SqlParameter("orderNo", item.OrderNo),
                     new SqlParameter("orderPos", item.OrderPos)
                 };
@@ -348,6 +351,7 @@ namespace ERPSystem.Helpers
                 sql.Append($"UPDATE OrderItem ");
                 sql.Append($"SET MaterialNo=@materialNo,");
                 sql.Append($"NOKQuantity=@nokQuantity ");
+                sql.Append($"TargetQuantity=@targetQuantity ");
                 sql.Append($"WHERE OrderNo=@orderNo AND OrderPos=@orderPos");
 
                 return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken, parameters);
@@ -489,6 +493,7 @@ namespace ERPSystem.Helpers
             item.OrderPos = (string)row["OrderPos"];
             item.MaterialNo = (string)row["MaterialNo"];
             item.NOKQuantity = MayConvertDBNull(row["NOKQuantity"], 0);
+            item.TargetQuantity = MayConvertDBNull(row["TargetQuantity"], 0);
 
             return item;
         }
