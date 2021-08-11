@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = Model.OrderNo != null ? "Details for Order No: " + Model.OrderNo : "New Order";
     var existingCustomers = ViewData["ExistingCustomers"] as CustomerCollection;
-    var existingMaterials = ViewData["ExistingMaterials"] as MaterialCollection;
 }
 <nav aria-label="breadcrumb mb-4">
     <ol class="breadcrumb">
@@ -70,7 +69,7 @@
                 <thead>
                     <th>OrderPos</th>
                     <th>Material</th>
-                    <th>NOKQuantity</th>
+                    <th>TargetQuantity</th>
                     <th style="width: 66px"></th>
                 </thead>
                 <tbody>

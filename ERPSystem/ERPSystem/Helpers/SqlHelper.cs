@@ -198,12 +198,10 @@ namespace ERPSystem.Helpers
 
                 var updates = await ExecuteNonQueryAsync(sql.ToString(), cancellationToken, parameters);
 
-                if (order.Items != null)
+                if (order.Items == null) return updates;
+                foreach (var item in order.Items)
                 {
-                    foreach (var item in order.Items)
-                    {
-                        await AddOrderItemAsync(item, cancellationToken);
-                    }
+                    await AddOrderItemAsync(item, cancellationToken);
                 }
 
                 return updates;
@@ -312,18 +310,18 @@ namespace ERPSystem.Helpers
                 {
                     new SqlParameter("orderNo", item.OrderNo),
                     new SqlParameter("orderPos", item.OrderPos),
-                    new SqlParameter("material", item.MaterialNo),
+                    new SqlParameter("materialNo", item.MaterialNo),
                     new SqlParameter("nokQuantity", item.NOKQuantity),
                     new SqlParameter("targetQuantity", item.TargetQuantity),
                 };
 
                 var sql = new StringBuilder();
 
-                sql.Append($"INSERT INTO OrderItem (OrderNo,OrderPos,MaterialNo,Status,NOKQuantity,TargetQuantity) VALUES (");
+                sql.Append($"INSERT INTO OrderItem (OrderNo,OrderPos,MaterialNo,NOKQuantity,TargetQuantity) VALUES (");
                 sql.Append($"@orderNo,");
                 sql.Append($"@orderPos,");
                 sql.Append($"@materialNo,");
-                sql.Append($"@nokQuantity");
+                sql.Append($"@nokQuantity,");
                 sql.Append($"@targetQuantity");
                 sql.Append(")");
 
@@ -350,7 +348,7 @@ namespace ERPSystem.Helpers
 
                 sql.Append($"UPDATE OrderItem ");
                 sql.Append($"SET MaterialNo=@materialNo,");
-                sql.Append($"NOKQuantity=@nokQuantity ");
+                sql.Append($"NOKQuantity=@nokQuantity,");
                 sql.Append($"TargetQuantity=@targetQuantity ");
                 sql.Append($"WHERE OrderNo=@orderNo AND OrderPos=@orderPos");
 

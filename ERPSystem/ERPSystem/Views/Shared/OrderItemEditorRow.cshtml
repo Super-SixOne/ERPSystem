@@ -2,6 +2,10 @@
 @using HtmlHelpers.BeginCollectionItemCore;
 @{
     var existingMaterials = ViewData["ExistingMaterials"] as MaterialCollection;
+    var materialsList = existingMaterials != null ? existingMaterials.Select(material => new SelectListItem()
+    {
+        Value = material.MaterialNo, Text = material.MaterialNo + " (" + material.MaterialType + ")"
+    }).ToList() : new List<SelectListItem>();
 }
 <tr class="editorRow">
     @using (Html.BeginCollectionItem("Items"))
@@ -10,18 +14,10 @@
             @Html.TextBoxFor(x => x.OrderPos, new {@class = "form-control"})
         </td>
         <td>
-            <select class="form-control" id="MaterialNo" name="MaterialNo" required asp-for="MaterialNo">
-                @if (existingMaterials != null)
-                {
-                    foreach (var material in existingMaterials)
-                    {
-                        <option value="@material.MaterialNo">@material.MaterialNo (@material.MaterialType)</option>
-                    }
-                }
-            </select>
+            @Html.DropDownListFor(x => x.MaterialNo, materialsList, new {@class = "form-control"})
         </td>
         <td>
-            @Html.TextBoxFor(x => x.NOKQuantity, new {@class="form-control", type="number"})
+            @Html.TextBoxFor(x => x.TargetQuantity, new {@class="form-control", type="number"})
         </td>
         <td>
              <span data-toggle="tooltip" title="Delete current item">

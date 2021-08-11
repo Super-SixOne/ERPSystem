@@ -40,10 +40,13 @@ namespace ERPSystem.Controllers
 
                     nextOrderNumber++;
                 }
-                
-                foreach (var orderItem in order.Items)
+
+                if (order.Items != null)
                 {
-                    orderItem.OrderNo = order.OrderNo;
+                    foreach (var orderItem in order.Items)
+                    {
+                        orderItem.OrderNo = order.OrderNo;
+                    }
                 }
 
                 await SqlHelper.AddOrderAsync(order, CancellationToken.None);
@@ -51,9 +54,12 @@ namespace ERPSystem.Controllers
             else
             {
                 // Note: I know that it is duplication. But I have to idea for now how to improve it, sorry
-                foreach (var orderItem in order.Items)
+                if (order.Items != null)
                 {
-                    orderItem.OrderNo = order.OrderNo;
+                    foreach (var orderItem in order.Items)
+                    {
+                        orderItem.OrderNo = order.OrderNo;
+                    }
                 }
                 
                 await SqlHelper.UpdateOrderAsync(order, CancellationToken.None);
