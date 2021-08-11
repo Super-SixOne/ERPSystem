@@ -43,7 +43,7 @@ namespace ERPSystem.Controllers
                             newOrderNumber = newOrderNumber.Insert(0, "0");
                         }
 
-                        order.OrderNo = nextOrderNumber.ToString();
+                        order.OrderNo = newOrderNumber.ToString();
                         break;
                     }
 
