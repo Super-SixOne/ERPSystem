@@ -19,9 +19,15 @@ namespace ERPSystem.Controllers
             _logger = logger;
         }
 
+        public async Task<CustomerCollection> GetAllCustomers()
+        {
+            var existingCustomers = await SqlHelper.GetCustomersAsync(CancellationToken.None);
+            return existingCustomers;
+        }
         public async Task<IActionResult> Index()
         {
             var lastOrders = await SqlHelper.GetLastOrdersAsync(5,CancellationToken.None);
+            ViewData["ExistingCustomers"] = await GetAllCustomers();
             
             return View(lastOrders);
         }

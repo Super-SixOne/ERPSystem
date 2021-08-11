@@ -18,6 +18,7 @@ namespace ERPSystem.Controllers
         {
             var orders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
 
+            ViewData["ExistingCustomers"] = await GetAllCustomers();
             return View(orders);
         }
 
@@ -91,6 +92,7 @@ namespace ERPSystem.Controllers
             var order = await SqlHelper.GetOrderAsync(orderNo, CancellationToken.None);
             
             ViewData["ExistingMaterials"] = await GetAllMaterials();
+            ViewData["ExistingCustomers"] = await GetAllCustomers();
             
             return View("OrderDetailedView", order);
         }

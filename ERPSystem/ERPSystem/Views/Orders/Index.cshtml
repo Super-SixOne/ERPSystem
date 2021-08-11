@@ -1,6 +1,7 @@
 ﻿@model ERPSystem.Models.OrderHeaderCollection;
 @{
     ViewData["Title"] = "Orders";
+    var existingCustomers = ViewData["ExistingCustomers"] as CustomerCollection;
 }
 
 <nav aria-label="breadcrumb">
@@ -25,6 +26,7 @@
         <th scope="col" style="width: 66px"></th>
         <th scope="col">Order ID</th>
         <th scope="col">Customer No</th>
+        <th scope="col">Customer Name</th>
         <th scope="col">Order Status</th>
         <th scope="col">Creation Date</th>
         <th scope="col"></th>
@@ -41,6 +43,12 @@
             </td>
             <td class="align-middle">@order.OrderNo</td>
             <td class="align-middle">@order.CustomerNo</td>
+            <td class="align-middle">
+                @if (existingCustomers != null)
+                {
+                    <span>@existingCustomers.FirstOrDefault(x => x.CustomerNo == order.CustomerNo)?.CustomerName</span>
+                }
+            </td>
             <td class="align-middle">
                 @switch (order.Status)
                 {

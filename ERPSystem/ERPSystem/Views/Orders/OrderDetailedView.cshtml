@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Details for Order No: " + Model.OrderNo;
     var existingMaterials = ViewData["ExistingMaterials"] as MaterialCollection;
+    var existingCustomers = ViewData["ExistingCustomers"] as CustomerCollection;
 }
 <nav aria-label="breadcrumb mb-4">
     <ol class="breadcrumb">
@@ -22,6 +23,15 @@
             <tr>
                 <td>Customer No:</td>
                 <td>@Model.CustomerNo</td>
+            </tr>
+            <tr>
+                <td>Customer Name:</td>
+                <td>
+                    @if (existingCustomers != null)
+                    {
+                        <span>@existingCustomers.FirstOrDefault(x => x.CustomerNo == @Model.CustomerNo)?.CustomerName</span>
+                    }
+                </td>
             </tr>
             <tr>
                 <td>Creation Date:</td>
