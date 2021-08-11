@@ -11,9 +11,6 @@
     @using (Html.BeginCollectionItem("Items"))
     {
         <td>
-            @Html.TextBoxFor(x => x.OrderPos, new {@class = "form-control"})
-        </td>
-        <td>
             @Html.DropDownListFor(x => x.MaterialNo, materialsList, new {@class = "form-control"})
         </td>
         <td>

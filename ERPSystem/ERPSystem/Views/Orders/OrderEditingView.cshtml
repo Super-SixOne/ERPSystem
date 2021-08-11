@@ -23,11 +23,7 @@
     <div class="row">
         <div class="col-4">
             <input type="hidden" name="OrderNo" id="OrderNo" value="@Model.OrderNo"/>
-            <input type="hidden" name="Status" id="Status" value="null"/>
-            <div class="form-group">
-                <label for="CreationDate">Order Date</label>
-                <input type="datetime-local" class="form-control" id="CreationDate" name="CreationDate" required value="@Model.CreationDate">
-            </div>
+            <input type="hidden" name="Status" id="Status" value="created"/>
             @if (existingCustomers != null)
             {
                 <div class="form-group">
@@ -67,7 +63,6 @@
 
             <table class="table table-striped" id="itemsTable">
                 <thead>
-                    <th>OrderPos</th>
                     <th>Material</th>
                     <th>TargetQuantity</th>
                     <th style="width: 66px"></th>

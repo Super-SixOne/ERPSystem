@@ -24,6 +24,7 @@ namespace ERPSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUpdateOrder(OrderHeader order)
         {
+            order.CreationDate = DateTime.Now;
             if (order.OrderNo == null)
             {
                 var existingOrders = await SqlHelper.GetOrdersAsync(CancellationToken.None);
@@ -41,12 +42,10 @@ namespace ERPSystem.Controllers
                     nextOrderNumber++;
                 }
 
-                if (order.Items != null)
+                for (var i = 0; i < order.Items.Count; i++)
                 {
-                    foreach (var orderItem in order.Items)
-                    {
-                        orderItem.OrderNo = order.OrderNo;
-                    }
+                    order.Items[i].OrderNo = order.OrderNo;
+                    order.Items[i].OrderPos = i.ToString("D" + 4);
                 }
 
                 await SqlHelper.AddOrderAsync(order, CancellationToken.None);
@@ -54,12 +53,11 @@ namespace ERPSystem.Controllers
             else
             {
                 // Note: I know that it is duplication. But I have to idea for now how to improve it, sorry
-                if (order.Items != null)
+                
+                for (var i = 0; i < order.Items.Count; i++)
                 {
-                    foreach (var orderItem in order.Items)
-                    {
-                        orderItem.OrderNo = order.OrderNo;
-                    }
+                    order.Items[i].OrderNo = order.OrderNo;
+                    order.Items[i].OrderPos = i.ToString("D" + 4);
                 }
                 
                 await SqlHelper.UpdateOrderAsync(order, CancellationToken.None);
