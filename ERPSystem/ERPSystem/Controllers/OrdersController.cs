@@ -53,7 +53,7 @@ namespace ERPSystem.Controllers
                 for (var i = 0; i < order.Items.Count; i++)
                 {
                     order.Items[i].OrderNo = order.OrderNo;
-                    order.Items[i].OrderPos = i.ToString("D" + 4);
+                    order.Items[i].OrderPos = (i+1).ToString("D" + 4);
                 }
 
                 await SqlHelper.AddOrderAsync(order, CancellationToken.None);
@@ -65,7 +65,7 @@ namespace ERPSystem.Controllers
                 for (var i = 0; i < order.Items.Count; i++)
                 {
                     order.Items[i].OrderNo = order.OrderNo;
-                    order.Items[i].OrderPos = i.ToString("D" + 4);
+                    order.Items[i].OrderPos = (i+1).ToString("D" + 4);
                 }
                 
                 await SqlHelper.UpdateOrderAsync(order, CancellationToken.None);
