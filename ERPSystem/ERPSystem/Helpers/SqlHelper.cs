@@ -257,8 +257,7 @@ namespace ERPSystem.Helpers
             {
                 new SqlParameter("orderNo", orderNo)
             };
-
-            await ExecuteNonQueryAsync($"DELETE FROM OrderItem WHERE OrderNo=@orderNo", cancellationToken, parameters);
+            
             return await ExecuteNonQueryAsync($"DELETE FROM OrderHeader WHERE OrderNo=@orderNo", cancellationToken, parameters);
         }
 
