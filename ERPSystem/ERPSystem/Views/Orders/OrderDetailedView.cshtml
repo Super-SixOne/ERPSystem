@@ -65,6 +65,12 @@
                     {
                         <tr>
                             <td>
+                                <span data-toggle="tooltip" title="Show material info">
+                                    <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#modal-popup" data-id="@item.MaterialNo"
+                                            onclick='ShowMaterialInfo("@item.MaterialNo")'>
+                                        <i class="fas fa-info"></i>
+                                    </button>
+                                </span>
                                 @item.MaterialNo
                                 @if (existingMaterials != null)
                                 {
@@ -88,3 +94,33 @@
         }
     </div>
 </div>
+
+
+<div class="modal fade" id="modal-popup" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Material information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        
+        let ShowMaterialInfo=function(materialNo){
+            let url="/Orders/ShowMaterialDetails?materialNo="+materialNo;
+            $("#modalBody").load(url,function(){
+                $("#modal-popup").modal("show");
+            })
+    
+        }
+    </script>
+}

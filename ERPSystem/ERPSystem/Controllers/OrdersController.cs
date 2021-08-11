@@ -113,5 +113,15 @@ namespace ERPSystem.Controllers
             ViewData["ExistingMaterials"] = await GetAllMaterials();
             return PartialView("OrderItemEditorRow", new OrderItem());
         }
+        
+        public async Task<IActionResult> ShowMaterialDetails(string materialNo)
+        {
+            var existingMaterials = await SqlHelper.GetMaterialsAsync(CancellationToken.None);
+
+            var material = existingMaterials.FirstOrDefault(c => c.MaterialNo == materialNo);
+
+            return PartialView("MaterialDetails", material);
+        }
+
     }
 }

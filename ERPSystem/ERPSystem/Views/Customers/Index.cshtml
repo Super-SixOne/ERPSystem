@@ -110,9 +110,9 @@
             window.location = path_to_delete;
         });
         
-        let AddEditCustomer=function(employeeId){
+        let AddEditCustomer=function(customerNo){
             
-            let url="/Customers/AddEditCustomer?CustomerNo="+employeeId;
+            let url="/Customers/AddEditCustomer?CustomerNo="+customerNo;
     
             $("#modalEditBody").load(url,function(){
                 $("#modal-edit").modal("show");

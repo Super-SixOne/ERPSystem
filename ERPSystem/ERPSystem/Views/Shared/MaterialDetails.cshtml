@@ -1,0 +1,9 @@
+﻿@model ERPSystem.Models.Material
+<div class="media">
+    <img class="mr-3" src="@Model.TechnicalDrawingURL" alt="" style="max-width: 40%;">
+    <div class="media-body">
+        <h5 class="mt-0">@Model.MaterialNo | @Model.MaterialType</h5>
+        <p>@Model.Description</p>
+        <p><small class="text-muted">@Model.QualityInstructions</small></p>
+    </div>
+</div>
