@@ -116,6 +116,20 @@ namespace ERPSystem.Helpers
             return customers;
         }
 
+        public static CustomerCollection GetCustomers()
+        {
+            var customers = new CustomerCollection();
+
+            var table = GetData("SELECT * FROM Customer");
+
+            foreach (DataRow row in table.Rows)
+            {
+                customers.Add(MapToCustomer(row));
+            }
+
+            return customers;
+        }
+
         public static async Task<Customer> GetCustomerAsync(string customerNo, CancellationToken cancellationToken)
         {
             List<SqlParameter> parameters = new List<SqlParameter>()
@@ -139,6 +153,20 @@ namespace ERPSystem.Helpers
             var materials = new MaterialCollection();
 
             var table = await GetDataAsync("SELECT * FROM Material", cancellationToken);
+
+            foreach (DataRow row in table.Rows)
+            {
+                materials.Add(MapToMaterial(row));
+            }
+
+            return materials;
+        }
+
+        public static MaterialCollection GetMaterials()
+        {
+            var materials = new MaterialCollection();
+
+            var table = GetData("SELECT * FROM Material");
 
             foreach (DataRow row in table.Rows)
             {
@@ -206,6 +234,49 @@ namespace ERPSystem.Helpers
                 foreach (var item in order.Items)
                 {
                     await AddOrderItemAsync(item, cancellationToken);
+                }
+
+                return updates;
+            }
+
+            return 0;
+        }
+
+        public static int AddOrder(OrderHeader order)
+        {
+            if (order != null)
+            {
+                List<SqlParameter> parameters = new List<SqlParameter>()
+                {
+                    new SqlParameter("orderNo", order.OrderNo),
+                    new SqlParameter("customerNo", order.CustomerNo),
+                    new SqlParameter("creationDate", order.CreationDate),
+                    new SqlParameter("status", order.Status),
+                    new SqlParameter("carrier", order.Carrier),
+                    new SqlParameter("sequence", order.Sequence)
+                };
+
+                var sql = new StringBuilder();
+
+                sql.Append($"INSERT INTO OrderHeader (OrderNo,CustomerNo,CreationDate,Status,Carrier,Sequence) VALUES (");
+                sql.Append($"@orderNo,");
+                sql.Append($"@customerNo,");
+                sql.Append($"@creationDate,");
+                sql.Append($"@status,");
+                sql.Append($"@carrier,");
+                sql.Append($"@sequence");
+                sql.Append(")");
+
+                var updates = ExecuteNonQuery(sql.ToString(), parameters);
+
+                if (order.Items == null)
+                {
+                    return updates;
+                }
+
+                foreach (var item in order.Items)
+                {
+                    AddOrderItem(item);
                 }
 
                 return updates;
@@ -295,6 +366,22 @@ namespace ERPSystem.Helpers
             return orders;
         }
 
+        public static OrderHeaderCollection GetAllOrders()
+        {
+            var orders = new OrderHeaderCollection();
+
+            var table = GetData($"SELECT * FROM OrderHeader");
+
+            foreach (DataRow row in table.Rows)
+            {
+                var order = MapToOrder(row, true);
+
+                orders.Add(order);
+            }
+
+            return orders;
+        }
+
         public static async Task<OrderHeader> GetOrderAsync(string orderNo, CancellationToken cancellationToken)
         {
             List<SqlParameter> parameters = new List<SqlParameter>()
@@ -336,6 +423,35 @@ namespace ERPSystem.Helpers
                 sql.Append(")");
 
                 return await ExecuteNonQueryAsync(sql.ToString(), cancellationToken, parameters);
+            }
+
+            return 0;
+        }
+
+        public static int AddOrderItem(OrderItem item)
+        {
+            if (item != null)
+            {
+                List<SqlParameter> parameters = new List<SqlParameter>()
+                {
+                    new SqlParameter("orderNo", item.OrderNo),
+                    new SqlParameter("orderPos", item.OrderPos),
+                    new SqlParameter("materialNo", item.MaterialNo),
+                    new SqlParameter("nokQuantity", item.NOKQuantity),
+                    new SqlParameter("targetQuantity", item.TargetQuantity),
+                };
+
+                var sql = new StringBuilder();
+
+                sql.Append($"INSERT INTO OrderItem (OrderNo,OrderPos,MaterialNo,NOKQuantity,TargetQuantity) VALUES (");
+                sql.Append($"@orderNo,");
+                sql.Append($"@orderPos,");
+                sql.Append($"@materialNo,");
+                sql.Append($"@nokQuantity,");
+                sql.Append($"@targetQuantity");
+                sql.Append(")");
+
+                return ExecuteNonQuery(sql.ToString(), parameters);
             }
 
             return 0;
@@ -398,6 +514,25 @@ namespace ERPSystem.Helpers
             return items;
         }
 
+        public static OrderItemCollection GetOrderItems(string orderNo)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>()
+            {
+                new SqlParameter("orderNo", orderNo),
+            };
+
+            var items = new OrderItemCollection();
+
+            var table = GetData($"SELECT * FROM OrderItem WHERE OrderNo=@orderNo", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                items.Add(MapToOrderItem(row));
+            }
+
+            return items;
+        }
+
         #endregion
 
         #region Helper Methods
@@ -425,6 +560,28 @@ namespace ERPSystem.Helpers
             return table;
         }
 
+        public static DataTable GetData(string statement, List<SqlParameter> parameters = null)
+        {
+            var table = new DataTable();
+
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                using var adapter = new SqlDataAdapter(statement, connection);
+
+                if (parameters != null)
+                {
+                    foreach (SqlParameter parameter in parameters)
+                    {
+                        adapter.SelectCommand.Parameters.Add(parameter);
+                    }
+                }
+
+                connection.Open();
+                adapter.Fill(table);
+            }
+
+            return table;
+        }
 
         public static async Task<int> ExecuteNonQueryAsync(string statement, CancellationToken cancellationToken, List<SqlParameter> parameters = null)
         {
@@ -442,6 +599,26 @@ namespace ERPSystem.Helpers
 
                     await connection.OpenAsync();
                     return await command.ExecuteNonQueryAsync(cancellationToken);
+                }
+            }
+        }
+
+        public static int ExecuteNonQuery(string statement, List<SqlParameter> parameters = null)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                using (var command = new SqlCommand(statement, connection))
+                {
+                    if (parameters != null)
+                    {
+                        foreach (SqlParameter parameter in parameters)
+                        {
+                            command.Parameters.Add(parameter);
+                        }
+                    }
+
+                    connection.Open();
+                    return command.ExecuteNonQuery();
                 }
             }
         }
@@ -488,6 +665,25 @@ namespace ERPSystem.Helpers
             if (loadItems)
             {
                 order.Items = await GetOrderItemsAsync(order.OrderNo, cancellationToken);
+            }
+
+            return order;
+        }
+
+        private static OrderHeader MapToOrder(DataRow row, bool loadItems)
+        {
+            var order = new OrderHeader();
+
+            order.OrderNo = (string)row["OrderNo"];
+            order.CustomerNo = (string)row["CustomerNo"];
+            order.CreationDate = (DateTime)row["CreationDate"];
+            order.Status = MayConvertDBNull<string>(row["Status"]);
+            order.Carrier = MayConvertDBNull<string>(row["Carrier"]);
+            order.Sequence = (int)row["Sequence"];
+
+            if (loadItems)
+            {
+                order.Items = GetOrderItems(order.OrderNo);
             }
 
             return order;
