@@ -22,29 +22,32 @@ namespace ERPSystem.Helpers
         {
             try
             {
-//                string json = string.Empty;
+                //                string json = string.Empty;
 
-//                string path = "C:\\inetpub\\wwwroot\\ERPSystem\\wwwroot\\bot\\orderBotConfig.json";
-//#if DEBUG
-//                path = "wwwroot/bot/orderBotConfig.json";
-//#endif
+                //                string path = "C:\\inetpub\\wwwroot\\ERPSystem\\wwwroot\\bot\\orderBotConfig.json";
+                //#if DEBUG
+                //                path = "wwwroot/bot/orderBotConfig.json";
+                //#endif
 
-//                using (StreamReader reader = new StreamReader(path))
-//                {
-//                    json = reader.ReadToEnd();
-//                }
+                //                using (StreamReader reader = new StreamReader(path))
+                //                {
+                //                    json = reader.ReadToEnd();
+                //                }
 
-//                dynamic obj = JObject.Parse(json);
+                //                dynamic obj = JObject.Parse(json);
 
-//                OrderBotConfig.isActive = obj.isActive;
-//                OrderBotConfig.orderDelay = obj.orderDelay;
-//                OrderBotConfig.maxOrderNumber = obj.maxOrderNumber;
-//                OrderBotConfig.minItems = obj.minItems;
-//                OrderBotConfig.maxItems = obj.maxItems;
-//                OrderBotConfig.maxTargetQuantity = obj.maxTargetQuantity;
-//                OrderBotConfig.maxSequence = obj.maxSequence;
+                //                OrderBotConfig.isActive = obj.isActive;
+                //                OrderBotConfig.orderDelay = obj.orderDelay;
+                //                OrderBotConfig.maxOrderNumber = obj.maxOrderNumber;
+                //                OrderBotConfig.minItems = obj.minItems;
+                //                OrderBotConfig.maxItems = obj.maxItems;
+                //                OrderBotConfig.maxTargetQuantity = obj.maxTargetQuantity;
+                //                OrderBotConfig.maxSequence = obj.maxSequence;
 
                 OrderBotConfig.isActive = true;
+#if DEBUG
+                OrderBotConfig.isActive = false;
+#endif
                 OrderBotConfig.orderDelay = 300000; 
                 OrderBotConfig.maxOrderNumber = 500000;
                 OrderBotConfig.minItems = 1;
