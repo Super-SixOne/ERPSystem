@@ -13,7 +13,7 @@ namespace ERPSystem.Helpers
 
             // ----- CONFIG -----
 
-            bool isActive = true;
+            bool isActive = false;
 
             int orderDelay = 120000; // in ms 
 
