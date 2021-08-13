@@ -1,7 +1,7 @@
 {
-	"isActive": false,
+	"isActive": true,
 	"orderDelay": 300000,
-	"maxOrderNumber": 20,
+	"maxOrderNumber": 50,
 	"minItems": 1,
 	"maxItems": 3,
 	"maxTargetQuantity": 5,
